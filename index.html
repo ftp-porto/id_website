@@ -1,0 +1,2368 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0B0D10" />
+<title>FTP Lab â€” Where Research Becomes Reality</title>
+<meta name="description" content="A scroll-driven journey into FTP's R&amp;D laboratory. Five international projects. Twelve specialists. From Porto to the world." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+<link rel="icon" type="image/png" href="assets/ftp-logo.png" />
+<link rel="preload" as="video" href="assets/intro.mp4" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- PROGRESS ================================================ -->
+<div class="scroll-progress" data-progress aria-hidden="true"><i></i></div>
+
+<!-- BRAND â€” top-left. Letters reveal F â†’ T â†’ P sequentially on
+     first load, then the phrase fades in. -->
+<a class="brand" href="#top" aria-label="FTP â€” Home" title="FTP">
+  <img class="brand__logo" src="assets/ftp-logo.png" alt="FTP" width="56" height="22" />
+  <span class="brand__phrase">Lab</span>
+</a>
+
+<!-- THEME TOGGLE â€” top-left, switches light/dark ============= -->
+<button class="theme-toggle" data-theme-toggle type="button" aria-label="Toggle light / dark mode" title="Toggle light / dark mode">
+  <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2 M12 20v2 M2 12h2 M20 12h2 M5 5l1.4 1.4 M17.6 17.6L19 19 M5 19l1.4-1.4 M17.6 6.4L19 5"/>
+  </svg>
+  <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
+<div class="language-switcher" data-language-switcher role="group" aria-label="Select language">
+  <span class="language-switcher__icon" aria-hidden="true">🌐</span>
+  <button type="button" class="language-switcher__btn" id="language-select" data-language-select aria-haspopup="listbox" aria-expanded="false" aria-label="Select language">
+    <span class="language-switcher__current" data-language-current></span>
+    <span class="language-switcher__chevron" aria-hidden="true">▾</span>
+  </button>
+  <ul class="language-switcher__menu" role="listbox" data-language-menu hidden></ul>
+</div>
+
+<!-- DOTNAV â€” vertical side menu, dots on the right edge ===== -->
+<nav class="dotnav" aria-label="Primary" data-dotnav>
+  <a class="dotnav__item" href="#top" data-section="top">
+    <span class="dotnav__label">Top</span>
+    <span class="dotnav__dot"></span>
+  </a>
+  <a class="dotnav__item" href="#solutions" data-section="solutions">
+    <span class="dotnav__label">Solutions</span>
+    <span class="dotnav__dot"></span>
+  </a>
+  <a class="dotnav__item" href="#projects" data-section="projects">
+    <span class="dotnav__label">Projects</span>
+    <span class="dotnav__dot"></span>
+  </a>
+  <a class="dotnav__item" href="#team" data-section="team">
+    <span class="dotnav__label">Team</span>
+    <span class="dotnav__dot"></span>
+  </a>
+  <a class="dotnav__item" href="#blog" data-section="blog">
+    <span class="dotnav__label">Blog</span>
+    <span class="dotnav__dot"></span>
+  </a>
+  <a class="dotnav__item" href="#about" data-section="about">
+    <span class="dotnav__label">About</span>
+    <span class="dotnav__dot"></span>
+  </a>
+  <a class="dotnav__item" href="#contact" data-section="contact">
+    <span class="dotnav__label">Contact</span>
+    <span class="dotnav__dot"></span>
+  </a>
+</nav>
+
+<main id="top">
+
+<!-- ============================================================
+     THE JOURNEY â€” pinned scrollytelling section
+     Scroll length = 700vh ; the inner stage is sticky.
+     Each chapter has data-from / data-to within [0,1] of progress.
+     ============================================================ -->
+<section class="journey" data-journey>
+
+  <div class="journey__stage" data-stage>
+
+    <!-- BACKDROP: 250-frame JPG sequence drawn into canvas, scrubbed by scroll -->
+    <div class="stage__bg">
+      <canvas class="stage__canvas" data-stage-canvas aria-hidden="true"></canvas>
+      <div class="stage__veil"></div>
+      <div class="stage__grain" aria-hidden="true"></div>
+      <div class="stage__vignette" aria-hidden="true"></div>
+    </div>
+
+    <!-- FRAME: corner crosshairs, always present -->
+    <div class="frame" aria-hidden="true">
+      <span class="frame__mark frame__mark--tl"></span>
+      <span class="frame__mark frame__mark--tr"></span>
+      <span class="frame__mark frame__mark--bl"></span>
+      <span class="frame__mark frame__mark--br"></span>
+    </div>
+
+    <!-- HUD: persistent top + bottom info -->
+    <div class="stage__hud">
+      <div class="hud-row">
+        <span class="hud-pill"><i class="hud-dot"></i><span data-stage-label>SCANNING</span></span>
+        <span class="hud-mono" data-clock>â€”â€” LISBON</span>
+      </div>
+      <div class="hud-row hud-row--right">
+        <span class="hud-mono">N 41.21Â° Â· W 8.55Â°</span>
+        <span class="hud-mono">PORTO / PT</span>
+      </div>
+    </div>
+
+    <!-- CHAPTERS â€” absolutely positioned, opacity/transform driven by JS -->
+    <div class="brain-ctas" data-brain-ctas>
+      <div class="brain-ctas__frame" data-brain-ctas-frame>
+        
+        <div class="brain-group brain-group--left">
+          <div class="brain-copy brain-copy--left" aria-hidden="true">
+            <span class="brain-copy__main">Solutions <em>&amp;</em> Services</span>
+          </div>
+          <a class="brain-cta brain-cta--left" href="#solutions" data-brain-cta="solutions">
+            <span class="brain-cta__label" style="font-size: 16px; font-family: 'IBM Plex Mono', monospace; font-weight: 500;">Solutions</span>
+          </a>
+        </div>
+
+        <div class="brain-group brain-group--right">
+          <div class="brain-copy brain-copy--right" aria-hidden="true">
+            <span class="brain-copy__main">Research <em>&amp;</em> Development</span>
+          </div>
+          <a class="brain-cta brain-cta--right" href="#projects" data-brain-cta="projects">
+            <span class="brain-cta__label" style="font-size: 16px; font-family: 'IBM Plex Mono', monospace; font-weight: 500;">Projects</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="chapters" data-chapters>
+
+      <!-- 0.00 â†’ 0.20  AWAKENING -->
+      <article id="awakening-cue" class="chapter chapter--awakening" data-from="0.00" data-to="0.20">
+        <p class="kicker">
+          <span>R&amp;D</span><span>Studio</span><span>Est. 1999</span>
+        </p>
+        <h1 class="display">
+          <span class="display__line"><span data-cue>From</span> <span data-cue>research</span></span>
+          <span class="display__line"><span data-cue>to</span> <em data-cue>reality.</em></span>
+        </h1>
+        <p class="awakening__lede">
+          We are <strong>FTP</strong> â€” a Portuguese laboratory translating
+          scientific investigation into applied, high-impact enterprise systems.
+        </p>
+      </article>
+
+      <!-- 0.20 â†’ 0.36  MANIFESTO -->
+      <article id="manifesto-cue" class="chapter chapter--manifesto" data-from="0.20" data-to="0.36">
+        <span class="chap-num">/ Chapter 01 Â· Manifesto</span>
+        <div class="manifesto-text" data-words>
+          <p>
+            We don't build software. We build the layer underneath
+            where <em>research</em> becomes a button you can press,
+            a decision a machine can <em>explain</em>,
+            a cost that quietly disappears.
+          </p>
+        </div>
+        <span class="chap-sig">â€” FTP / R&amp;D Department Â· Porto</span>
+      </article>
+
+      <!-- 0.36 â†’ 0.48  THE LAB -->
+      <article class="chapter chapter--lab" data-from="0.36" data-to="0.48">
+        <span class="chap-num">/ Chapter 02 Â· The Lab</span>
+        <h2 class="lab-title">
+          A <em>laboratory</em><br/>shaped like a company.
+        </h2>
+        <div class="lab-stats">
+          <div class="lab-stat">
+            <strong data-counter="27"><i>00</i></strong>
+            <span class="lab-stat__sfx">years</span>
+            <span class="lab-stat__lbl">since 1999</span>
+          </div>
+          <div class="lab-stat">
+            <strong data-counter="5"><i>0</i></strong>
+            <span class="lab-stat__sfx">projects</span>
+            <span class="lab-stat__lbl">active R&amp;D consortia</span>
+          </div>
+          <div class="lab-stat">
+            <strong data-counter="8"><i>0</i></strong>
+            <span class="lab-stat__sfx">countries</span>
+            <span class="lab-stat__lbl">PT Â· TR Â· KR Â· ES Â· RO</span>
+          </div>
+          <div class="lab-stat">
+            <strong data-counter="5"><i>0</i></strong>
+            <span class="lab-stat__sfx">papers</span>
+            <span class="lab-stat__lbl">IEEE Â· Procedia Â· 2025â€“26</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- ============ FIVE PROJECTS â€” pass-by chambers ============ -->
+
+      <!-- 0.48 â†’ 0.55  EARS -->
+      <article id="projects-cue" class="chapter chapter--proj chapter--ears" data-from="0.48" data-to="0.55">
+        <div class="proj">
+          <span class="chap-num">/ Chapter 03 Â· Project I of V</span>
+          <header>
+            <span class="proj__tag">ITEA Â· Norte 2030 Â· 14 partners</span>
+            <span class="proj__status"><i></i><span>Ongoing Â· 2023â€“2026</span></span>
+          </header>
+          <h2 class="proj__title">EARS</h2>
+          <p class="proj__sub">Intelligent Recommendation for Remote Services</p>
+          <p class="proj__body">
+            A federated, explainable recommendation framework that learns across
+            <em>nine sectors</em> â€” IT, healthcare, justice, e-commerce,
+            telemarketing, industry, logistics, electronics, software â€” and
+            <em>explains</em> every suggestion it makes. Open-source. Privacy by design.
+          </p>
+          <ul class="proj__chips">
+            <li>Recommender Systems</li><li>Explainable AI</li>
+            <li>Federated Learning</li><li>Context-Aware</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 0.55 â†’ 0.62  EXPAI -->
+      <article class="chapter chapter--proj chapter--expai" data-from="0.55" data-to="0.62">
+        <div class="proj">
+          <span class="chap-num">/ Project II of V</span>
+          <header>
+            <span class="proj__tag">ITEA 4 Â· Smart Industry Â· 12 partners</span>
+            <span class="proj__status"><i></i><span>Ongoing Â· 2024â€“2026</span></span>
+          </header>
+          <h2 class="proj__title">EXPAI</h2>
+          <p class="proj__sub">Smart Industry Â· Explainable AI for Industrial Control</p>
+          <p class="proj__body">
+            Closing the gap between <em>black-box AI</em> and high-precision
+            factory floors. Computer Vision over sensor streams, automatic 3D
+            retopology, autonomous mobile robots â€” under an XAI layer that makes
+            every decision <em>auditable</em>.
+          </p>
+          <ul class="proj__chips">
+            <li>XAI</li><li>Computer Vision</li>
+            <li>AMR Robotics</li><li>3D Retopology</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 0.62 â†’ 0.69  ELFMO -->
+      <article class="chapter chapter--proj chapter--elfmo" data-from="0.62" data-to="0.69">
+        <div class="proj">
+          <span class="chap-num">/ Project III of V</span>
+          <header>
+            <span class="proj__tag">ITEA Â· Norte 2030 Â· 16 partners</span>
+            <span class="proj__status"><i></i><span>Ongoing Â· 2024â€“2027</span></span>
+          </header>
+          <h2 class="proj__title">ELFMO</h2>
+          <p class="proj__sub">Enterprise Large Foundation Models</p>
+          <p class="proj__body">
+            A risk-based engineering framework that lets enterprises adopt
+            <em>foundation models</em> without losing control of data, IP or
+            compliance. Modular ERP integration. PHC-aware chatbot.
+            Foundation models living inside the systems your business already runs on.
+          </p>
+          <ul class="proj__chips">
+            <li>Generative AI</li><li>LFM Adaptation</li>
+            <li>ERP Integration</li><li>GDPR Â· AI Act</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 0.69 â†’ 0.76  CAPE -->
+      <article class="chapter chapter--proj chapter--cape" data-from="0.69" data-to="0.76">
+        <div class="proj">
+          <span class="chap-num">/ Project IV of V</span>
+          <header>
+            <span class="proj__tag">ITEA 4 Â· 19 partners Â· 5 countries</span>
+            <span class="proj__status"><i></i><span>Ongoing Â· 2024â€“2027</span></span>
+          </header>
+          <h2 class="proj__title">CAPE</h2>
+          <p class="proj__sub">Cognitive Assistant for Phygital Environments</p>
+          <p class="proj__body">
+            A retail platform fusing AI, IoT, blockchain and deep learning â€”
+            five use cases spanning <em>smart manufacturing safety</em>,
+            store ops, employee well-being and personalised commerce.
+          </p>
+          <ul class="proj__chips">
+            <li>IoT</li><li>Blockchain</li>
+            <li>Deep Learning</li><li>Computer Vision</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 0.76 â†’ 0.82  OMD -->
+      <article class="chapter chapter--proj chapter--omd" data-from="0.76" data-to="0.82">
+        <div class="proj">
+          <span class="chap-num">/ Project V of V</span>
+          <header>
+            <span class="proj__tag">Cross-domain Â· 12 partners</span>
+            <span class="proj__status proj__status--done"><i></i><span>Finished Â· 2022â€“2023</span></span>
+          </header>
+          <h2 class="proj__title">OMD</h2>
+          <p class="proj__sub">Cognitive Service Demand Management</p>
+          <p class="proj__body">
+            Voice + text understanding for a real e-commerce use case
+            (Nimco, Portuguese footwear). Proof that <em>NLP-driven service
+            management</em> could quietly outperform rules-based ticketing.
+          </p>
+          <ul class="proj__chips">
+            <li>NLP</li><li>ML</li><li>Speech-to-Text</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 0.82 â†’ 0.89  ATLAS â€” global reach -->
+      <article class="chapter chapter--atlas" data-from="0.82" data-to="0.89">
+        <span class="chap-num">/ Chapter 04 Â· Atlas</span>
+        <h2 class="atlas__title">
+          From Porto<br/>to the <em>world</em>.
+        </h2>
+        <div class="atlas">
+          <div class="atlas__map">
+            <img class="atlas__world" src="assets/world-map.svg" alt="" aria-hidden="true" />
+            <svg viewBox="0 0 1000 500" preserveAspectRatio="none">
+              <g class="atlas__graticule">
+                <line x1="0" y1="250" x2="1000" y2="250"/>
+                <line x1="500" y1="0" x2="500" y2="500"/>
+              </g>
+              <g class="atlas__routes">
+                <path d="M476,136 Q483,148 490,138" pathLength="100"/>
+                <path d="M476,136 Q524,90 572,127" pathLength="100"/>
+                <path d="M476,136 Q533,85 591,139" pathLength="100"/>
+                <path d="M476,136 Q666,20 857,150" pathLength="100"/>
+                <path d="M476,136 Q383,48 290,124" pathLength="100"/>
+                <path d="M476,136 Q530,88 585,110" pathLength="100"/>
+                <path d="M476,136 Q489,93 500,107" pathLength="100"/>
+              </g>
+            </svg>
+            <a class="atlas__pin atlas__pin--pt atlas__pin--up atlas__pin--link" href="#blog" aria-label="Read the blog post related to Porto"><i aria-hidden="true"><img src="assets/flags/pt.svg" alt="" loading="lazy" decoding="async" /></i><b>Porto</b><em>HQ</em></a>
+            <span class="atlas__pin atlas__pin--es"><i aria-hidden="true"><img src="assets/flags/es.svg" alt="" loading="lazy" decoding="async" /></i><b>Madrid</b><em>EXPAI</em></span>
+            <span class="atlas__pin atlas__pin--ro atlas__pin--up"><i aria-hidden="true"><img src="assets/flags/ro.svg" alt="" loading="lazy" decoding="async" /></i><b>Bucharest</b><em>OMD Â· EARS</em></span>
+            <a class="atlas__pin atlas__pin--tr atlas__pin--link" href="#blog" aria-label="Read the blog post related to Ankara"><i aria-hidden="true"><img src="assets/flags/tr.svg" alt="" loading="lazy" decoding="async" /></i><b>Ankara</b><em>EARS Â· EXPAI</em></a>
+            <a class="atlas__pin atlas__pin--kr atlas__pin--link" href="#blog" aria-label="Read the blog post related to Daegu"><i aria-hidden="true"><img src="assets/flags/kr.svg" alt="" loading="lazy" decoding="async" /></i><b>Daegu</b><em>EXPAI plenary</em></a>
+            <span class="atlas__pin atlas__pin--ca"><i aria-hidden="true"><img src="assets/flags/ca.svg" alt="" loading="lazy" decoding="async" /></i><b>Canada</b></span>
+            <span class="atlas__pin atlas__pin--ua atlas__pin--up"><i aria-hidden="true"><img src="assets/flags/ua.svg" alt="" loading="lazy" decoding="async" /></i><b>Ukraine</b></span>
+            <span class="atlas__pin atlas__pin--gb atlas__pin--up"><i aria-hidden="true"><img src="assets/flags/gb.svg" alt="" loading="lazy" decoding="async" /></i><b>Great Britain</b></span>
+          </div>
+          <div class="atlas__copy">
+            Plenaries in Ankara (Nov '25) and Daegu (Apr '26).
+            Next stop: a unified ITEA review demo.
+          </div>
+        </div>
+      </article>
+
+      <!-- 0.89 â†’ 0.96  MINDS â€” quotes cycle -->
+      <article id="minds-cue" class="chapter chapter--minds" data-from="0.89" data-to="0.96">
+        <span class="chap-num">/ Chapter 05 Â· The Minds</span>
+        <h2 class="minds-title">
+          The people<br/>doing the <em>thinking</em>.
+        </h2>
+        <div class="quotes" data-quotes>
+          <figure class="quote" data-quote>
+            <blockquote>Companies that integrate applied AI don't react to the market â€” they anticipate it.</blockquote>
+            <figcaption><strong>FÃ¡bio</strong> Â· <span>Department Head</span></figcaption>
+          </figure>
+          <figure class="quote" data-quote>
+            <blockquote>With AI, the limit is no longer time â€” it is imagination.</blockquote>
+            <figcaption><strong>Teixeira</strong> Â· R&amp;D Â· ELFMO</figcaption>
+          </figure>
+          <figure class="quote" data-quote>
+            <blockquote>Innovation is born when we turn recurring effort into permanent solutions.</blockquote>
+            <figcaption><strong>Cruz</strong> Â· R&amp;D Â· Computer Vision</figcaption>
+          </figure>
+          <figure class="quote" data-quote>
+            <blockquote>Blending a little bit of magic with a lot of intelligence to build the future.</blockquote>
+            <figcaption><strong>Mariana</strong> Â· R&amp;D Â· 3D Graphics &amp; EXPAI</figcaption>
+          </figure>
+          <figure class="quote" data-quote>
+            <blockquote>From the chaos of ideas to the elegance of outcomes â€” turning them into flight.</blockquote>
+            <figcaption><strong>Isabel</strong> Â· <span>Project Manager</span></figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <!-- 0.96 â†’ 1.00  INVITATION -->
+      <article class="chapter chapter--invite" data-from="0.96" data-to="1.00">
+        <span class="chap-num">/ Final Chapter Â· Invitation</span>
+        <h2 class="invite-title">
+          <span data-cue>Where</span>
+          <span data-cue>digital</span>
+          <em data-cue>trust</em>
+          <span data-cue>begins.</span>
+        </h2>
+        <p class="invite-lede">Continue scrolling â€” the lab, in detail.</p>
+        <span class="invite-arrow">â†“</span>
+      </article>
+
+    </div><!-- /.chapters -->
+
+  </div><!-- /.journey__stage -->
+
+  <!-- floor marker for accessibility / focus / nav -->
+  <div class="journey__floor" id="projects-cue" aria-hidden="true"></div>
+</section>
+
+<!-- ============================================================
+     INNOVATION LINES â€” marquee
+     ============================================================ -->
+<section class="sec sec--innov">
+  <span class="chap-num chap-num--solo sec__kicker-solo">/ Innovation Lines</span>
+  <div class="marquee">
+    <div class="marquee__track">
+      <span>Computer Vision</span><i>Â·</i>
+      <span>Intelligent Automation</span><i>Â·</i>
+      <span>Data Analytics</span><i>Â·</i>
+      <span>Digital Twins</span><i>Â·</i>
+      <span>Predictive Systems</span><i>Â·</i>
+      <span>Applied R&amp;D</span><i>Â·</i>
+      <span>3D &amp; Computer Graphics</span><i>Â·</i>
+      <span>Computer Vision</span><i>Â·</i>
+      <span>Intelligent Automation</span><i>Â·</i>
+      <span>Data Analytics</span><i>Â·</i>
+      <span>Digital Twins</span><i>Â·</i>
+      <span>Predictive Systems</span><i>Â·</i>
+      <span>Applied R&amp;D</span><i>Â·</i>
+      <span>3D &amp; Computer Graphics</span><i>Â·</i>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SOLUTIONS â€” full detail
+     ============================================================ -->
+<section id="solutions" class="sec sec--solutions">
+    <span class="chap-num chap-num--solo">/ Solutions &amp; Services</span>
+      Innovative solutions &amp; <em>professional</em> services.
+    </h2>
+    <p class="sec__lede">
+      Driving digital transformation through advanced AI and specialised
+      software engineering. Five domain-agnostic engines you can drop into
+      a real business, each one a side door from a peer-reviewed paper.
+    </p>
+  </header>
+
+  <ol class="solutions">
+
+    <!-- Solution 01 -->
+    <li class="solution solution--video" id="sol-recommender">
+      <figure class="solution__art solution__art--video">
+        <video
+          src="assets/solutions/sol-01.mp4"
+          poster="assets/solutions/sol-01.jpg"
+          muted loop playsinline preload="metadata"
+          aria-label="Hybrid Explainable Recommender â€” live demo">
+        </video>
+        <span class="solution__art-badge"><i></i>Live demo</span>
+      </figure>
+      <header>
+        <span class="solution__num">/01</span>
+        <h3>Hybrid Explainable Recommender</h3>
+        <span class="solution__tag">e-commerce Â· cross-domain Â· Wordpress</span>
+      </header>
+      <div class="solution__scroll">
+        <p class="solution__lead">
+          A hybrid explainable recommendation system that delivers personalised
+          suggestions with clear, evidence-based reasoning behind every result.
+        </p>
+        <p class="solution__intro">
+          Our Hybrid Explainable Recommendation System is designed to deliver
+          not only highly relevant recommendations, but also <em>clear and
+          meaningful explanations</em> behind each decision.
+        </p>
+        <p class="solution__intro">
+          In many systems, recommendations are presented as opaque outputs â€”
+          users see what is suggested, but not why. This solution addresses
+          that gap by combining advanced recommendation modelling with built-in
+          explainability, making every result both <em>accurate and interpretable</em>.
+        </p>
+
+        <section class="solution__block">
+          <h4>What It Does</h4>
+          <p>
+            The system analyses multiple layers of user and product signals to
+            generate personalised recommendations, including:
+          </p>
+          <ul>
+            <li>Historical interaction behaviour</li>
+            <li>Purchase and conversion patterns</li>
+            <li>Collaborative signals across similar users</li>
+          </ul>
+          <p>
+            Each result is accompanied by a short, natural-language explanation
+            grounded in real data â€” derived directly from the evidence used
+            during ranking.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Why It Matters</h4>
+          <p>
+            Understanding <em>why</em> something is recommended increases trust,
+            improves user experience, and supports better decision-making.
+            The system ensures that:
+          </p>
+          <ul>
+            <li>Recommendations remain consistent and justifiable</li>
+            <li>Explanations are aligned with actual model behaviour</li>
+            <li>Outputs can be validated and trusted</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>Key Capabilities</h4>
+          <ul>
+            <li>Personalised recommendations based on user behaviour and contextual signals</li>
+            <li>Built-in explainability with evidence-based reasoning</li>
+            <li>Hybrid modelling combining historical, behavioural, and collaborative data</li>
+            <li>Natural-language output with human-readable explanations</li>
+            <li>Reusable, domain-agnostic architecture</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>How It Works</h4>
+          <p>
+            The system uses a hybrid recommendation model to rank items based
+            on multiple signal sources. An integrated language model translates
+            structured evidence into short explanations, ensuring every
+            recommendation is both <em>data-driven</em> and <em>understandable</em>.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Designed for Adaptation</h4>
+          <p>
+            This system serves as a foundational layer adaptable into
+            project-specific solutions. Its modular design allows integration
+            into different platforms while preserving both recommendation
+            performance and explainability.
+          </p>
+        </section>
+
+        <ul class="chips chips--inline">
+          <li>Recommender Systems</li>
+          <li>Explainable AI</li>
+          <li>Hybrid Modelling</li>
+          <li>Natural-Language Output</li>
+          <li>Domain-Agnostic</li>
+        </ul>
+      </div>
+    </li>
+
+    <!-- Solution 02 -->
+    <li class="solution solution--video" id="sol-emotion">
+      <figure class="solution__art solution__art--video">
+        <video
+          src="assets/solutions/sol-02.mp4"
+          poster="assets/solutions/sol-02.jpg"
+          muted loop playsinline preload="metadata"
+          aria-label="Multimodal Emotion Recognition â€” live demo">
+        </video>
+        <span class="solution__art-badge"><i></i>Live demo</span>
+      </figure>
+      <header>
+        <span class="solution__num">/02</span>
+        <h3>Multimodal Emotion Recognition</h3>
+        <span class="solution__tag">customer experience Â· workplace</span>
+      </header>
+      <div class="solution__scroll">
+        <p class="solution__lead">
+          Voice prosody, facial micro-expressions and spoken content fused
+          into a unified emotional profile â€” real-time, privacy-aware,
+          federated-ready.
+        </p>
+        <p class="solution__intro">
+          Our Multimodal Emotion Recognition system reads the <em>full
+          signal</em> a person sends: how they sound, how their face moves,
+          and what they say. Instead of relying on a single channel, it
+          fuses audio, video and text into one coherent emotional state â€”
+          with both <em>category</em> and <em>intensity</em>.
+        </p>
+        <p class="solution__intro">
+          The architecture is designed for sensitive contexts: inference
+          can run locally on the edge, models are <em>federated-ready</em>
+          so personal data never has to leave the device, and the same
+          engine works across customer-facing and workplace deployments.
+        </p>
+
+        <section class="solution__block">
+          <h4>What It Does</h4>
+          <ul>
+            <li>Analyses voice tone, rhythm and prosody</li>
+            <li>Reads facial expressions and micro-expressions</li>
+            <li>Processes spoken content and contextual metadata</li>
+            <li>Predicts both emotion category and intensity</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>Why It Matters</h4>
+          <p>
+            Improves customer satisfaction by adapting to <em>emotional
+            context</em> in real time. Detects stress, discomfort and
+            disengagement early â€” before they escalate. Supports employee
+            well-being via continuous, opt-in sentiment monitoring.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Key Capabilities</h4>
+          <ul>
+            <li>Multimodal detection across audio, video and text</li>
+            <li>Real-time inference suitable for live interactions</li>
+            <li>Federated learning ready â€” train without centralising data</li>
+            <li>Privacy-aware design with on-device processing options</li>
+            <li>Configurable emotion taxonomies for different domains</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>How It Works</h4>
+          <p>
+            Three specialised encoders extract signals from voice,
+            face and text in parallel. A fusion layer combines them into a
+            <em>unified emotional embedding</em>, which a downstream head
+            translates into category + intensity predictions. The whole
+            pipeline runs on commodity hardware with low latency.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Designed for Adaptation</h4>
+          <p>
+            Drop the engine into a contact-centre, a retail experience,
+            an HR well-being programme or a clinical study â€” the same core
+            adapts via lightweight fine-tuning. The system is the
+            multimodal foundation behind our work in <em>EARS</em> and
+            ships with privacy controls aligned with GDPR and the AI Act.
+          </p>
+        </section>
+
+        <ul class="chips chips--inline">
+          <li>Multimodal Detection</li>
+          <li>Real-time Inference</li>
+          <li>Federated Learning Ready</li>
+          <li>Privacy-Aware</li>
+          <li>Audio Â· Video Â· Text</li>
+        </ul>
+      </div>
+    </li>
+
+    <!-- Solution 03 -->
+    <li class="solution solution--video" id="sol-erp">
+      <figure class="solution__art solution__art--video">
+        <video
+          src="assets/solutions/sol-03.mp4"
+          poster="assets/solutions/sol-03.jpg"
+          muted loop playsinline preload="metadata"
+          aria-label="ERP Virtual Assistant â€” live demo">
+        </video>
+        <span class="solution__art-badge"><i></i>Live demo</span>
+      </figure>
+      <header>
+        <span class="solution__num">/03</span>
+        <h3>ERP Virtual Assistant</h3>
+        <span class="solution__tag">PHC Â· Sage Â· Primavera</span>
+      </header>
+      <div class="solution__scroll">
+        <p class="solution__lead">
+          An intelligent conversational interface that simplifies how
+          businesses interact with their management systems â€” invoices,
+          reports, forecasts and answers, without the menus.
+        </p>
+        <p class="solution__intro">
+          Our ERP Virtual Assistant turns the ERP from a <em>menu-driven
+          tool</em> into a <em>conversational partner</em>. Instead of
+          navigating layers of forms and reports, users simply ask â€” and
+          the system delivers documents, summaries, forecasts and answers
+          grounded in their own business data.
+        </p>
+        <p class="solution__intro">
+          The assistant connects directly to PHC, Sage, Primavera and other
+          ERPs, blending <em>natural language understanding</em> with
+          domain-specific business logic so that every reply is both
+          contextual and operationally accurate.
+        </p>
+
+        <section class="solution__block">
+          <h4>What It Does</h4>
+          <ul>
+            <li>Generates invoices &amp; financial documents automatically</li>
+            <li>Produces periodic reports and performance summaries</li>
+            <li>Delivers AI-powered forecasts from historical data</li>
+            <li>Answers business queries in natural language</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>Why It Matters</h4>
+          <p>
+            Reduces time spent on repetitive admin. Makes business data
+            accessible to <em>non-technical users</em>. Enables faster,
+            data-informed decisions. Provides <em>proactive insights</em>
+            instead of reactive reporting.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Key Capabilities</h4>
+          <ul>
+            <li>NLP layer over the ERP â€” talk to your business in plain language</li>
+            <li>Automated document generation (invoices, orders, statements)</li>
+            <li>AI forecasting trained on the client's historical operations</li>
+            <li>Multi-source data aggregation across modules and systems</li>
+            <li>Custom ERP API connectors â€” PHC, Sage, Primavera and beyond</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>How It Works</h4>
+          <p>
+            A natural-language layer interprets user intent, maps it to
+            ERP-native operations, and orchestrates the right modules to
+            answer or act. Forecasts and summaries are produced by domain
+            models trained on the client's own historical data, so output
+            stays <em>specific</em> and <em>accountable</em>.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Designed for Adaptation</h4>
+          <p>
+            Built as a modular layer on top of the existing ERP, it extends
+            without disrupting. New connectors, new business rules and new
+            data sources can be added incrementally â€” the assistant evolves
+            alongside the operation.
+          </p>
+        </section>
+
+        <ul class="chips chips--inline">
+          <li>NLP over ERP</li>
+          <li>Automated Documents</li>
+          <li>AI Forecasting</li>
+          <li>Multi-source Aggregation</li>
+          <li>Custom ERP API</li>
+        </ul>
+      </div>
+    </li>
+
+    <!-- Solution 04 -->
+    <li class="solution solution--video" id="sol-agents">
+      <figure class="solution__art solution__art--video">
+        <video
+          src="assets/solutions/sol-04.mp4"
+          poster="assets/solutions/sol-04.jpg"
+          muted loop playsinline preload="metadata"
+          aria-label="Autonomous Agent Systems â€” live demo">
+        </video>
+        <span class="solution__art-badge"><i></i>Live demo</span>
+      </figure>
+      <header>
+        <span class="solution__num">/04</span>
+        <h3>Autonomous Agent Systems</h3>
+        <span class="solution__tag">automation Â· orchestration</span>
+      </header>
+      <div class="solution__scroll">
+        <p class="solution__lead">
+          AI-powered systems that execute tasks independently, make informed
+          decisions, and coordinate operations with minimal human intervention.
+        </p>
+        <p class="solution__intro">
+          Our Autonomous Agent Systems turn isolated automations into a
+          <em>coordinated, goal-driven workforce</em>. Each agent owns a
+          slice of the operation â€” planning its own actions, calling the
+          right tools and APIs, and adjusting based on feedback â€” so the
+          whole pipeline keeps moving without a human at every step.
+        </p>
+        <p class="solution__intro">
+          Agents collaborate through a shared orchestration layer that
+          tracks state, handles handoffs and resolves conflicts. The
+          result is a system that operates more like a <em>team</em>
+          than a script: resilient to surprise, capable of branching, and
+          observable end-to-end.
+        </p>
+
+        <section class="solution__block">
+          <h4>What It Does</h4>
+          <ul>
+            <li>Plans, executes and adjusts actions on feedback</li>
+            <li>Operates across multiple systems and APIs</li>
+            <li>Handles sequential and conditional task chains</li>
+            <li>Learns and improves through contextual feedback</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>Why It Matters</h4>
+          <p>
+            Adapts dynamically to context <em>without manual intervention</em>.
+            Integrates multiple systems into unified workflows. Acts
+            proactively rather than reactively. Reduces operational overhead
+            and human error.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Key Capabilities</h4>
+          <ul>
+            <li>Autonomous execution of long-running, multi-step tasks</li>
+            <li>API integration with internal and external services</li>
+            <li>Multi-step workflows with branching and recovery</li>
+            <li>Adaptive learning from outcomes and human feedback</li>
+            <li>Self-managing â€” agents allocate work amongst themselves</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>How It Works</h4>
+          <p>
+            A central orchestrator decomposes the goal into tasks and
+            assigns them to specialised agents. Each agent reasons over
+            its own tools, calls APIs, and reports back. The orchestrator
+            keeps a <em>shared memory</em> of state and outcomes, enabling
+            agents to coordinate, retry intelligently, and learn from
+            previous runs.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Designed for Adaptation</h4>
+          <p>
+            Built as a modular framework: new agents, new tools, new
+            domains can be added without rewriting the core. The same
+            engine underpins automations across customer service,
+            operations and back-office processes â€” and is reused inside
+            our work on <em>EARS</em> and <em>ELFMO</em>.
+          </p>
+        </section>
+
+        <ul class="chips chips--inline">
+          <li>Autonomous Execution</li>
+          <li>API Integration</li>
+          <li>Multi-Step Workflows</li>
+          <li>Adaptive Learning</li>
+          <li>Self-Managing</li>
+        </ul>
+      </div>
+    </li>
+
+    <!-- Solution 05 -->
+    <li class="solution solution--video" id="sol-retopo">
+      <figure class="solution__art solution__art--video">
+        <video
+          src="assets/solutions/sol-05.mp4"
+          poster="assets/solutions/sol-05.jpg"
+          muted loop playsinline preload="metadata"
+          aria-label="Retopology Converter â€” live demo">
+        </video>
+        <span class="solution__art-badge"><i></i>Live demo</span>
+      </figure>
+      <header>
+        <span class="solution__num">/05</span>
+        <h3>Retopology Converter</h3>
+        <span class="solution__tag">3D pipelines Â· games Â· industrial viz</span>
+      </header>
+      <div class="solution__scroll">
+        <p class="solution__lead">
+          Transforms high-poly models into optimised low-poly meshes while
+          preserving essential detail and visual fidelity. Clean, quad-based
+          topology suitable for animation and real-time applications.
+        </p>
+        <p class="solution__intro">
+          Our Retopology Converter takes dense, scan-derived or sculpted
+          geometry and rebuilds it as <em>clean, animation-ready</em>
+          topology â€” automatically. The result preserves silhouette and
+          surface detail while replacing chaotic triangulation with
+          predictable quad flow.
+        </p>
+        <p class="solution__intro">
+          The system was designed to live inside production pipelines:
+          studios can drop in raw assets and get back meshes that are
+          immediately usable for rigging, baking, real-time rendering or
+          industrial simulation â€” without weeks of manual cleanup.
+        </p>
+
+        <section class="solution__block">
+          <h4>What It Does</h4>
+          <ul>
+            <li>Reduces mesh complexity automatically</li>
+            <li>Preserves core geometry and shape</li>
+            <li>Maintains visual fidelity end-to-end</li>
+            <li>Generates clean quad-based topology</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>Why It Matters</h4>
+          <p>
+            Cuts production time and manual effort. Ensures <em>consistent
+            topology quality</em> across an entire pipeline. Enables faster
+            iteration and scaling for game development, film and industrial
+            visualisation studios.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Key Capabilities</h4>
+          <ul>
+            <li>Fully automated retopology â€” no manual quad-drawing required</li>
+            <li>Quad-based output suitable for animation and subdivision</li>
+            <li>Geometry &amp; silhouette preservation across LODs</li>
+            <li>Real-time engine ready â€” Unreal, Unity, web 3D out-of-the-box</li>
+            <li>Batch processing for asset libraries and scan archives</li>
+          </ul>
+        </section>
+
+        <section class="solution__block">
+          <h4>How It Works</h4>
+          <p>
+            The pipeline analyses the input mesh's curvature, feature lines
+            and topology flow, then generates a new <em>quad-dominant
+            surface</em> aligned to those features. UVs and normals are
+            transferred from the source so the converted asset retains its
+            original look while running orders of magnitude lighter.
+          </p>
+        </section>
+
+        <section class="solution__block">
+          <h4>Designed for Adaptation</h4>
+          <p>
+            The converter is modular: studios plug it into existing DCC
+            workflows (Blender, Maya, Houdini) or call it as a service from
+            their own asset pipelines. The same engine underpins our work in
+            <em>EXPAI</em> (industrial 3D) and is reused across consumer and
+            enterprise projects.
+          </p>
+        </section>
+
+        <ul class="chips chips--inline">
+          <li>Automated Retopology</li>
+          <li>Quad-Based Output</li>
+          <li>Geometry Preservation</li>
+          <li>Real-time Engine Ready</li>
+        </ul>
+      </div>
+    </li>
+
+  </ol>
+
+  <!-- Expert Services -->
+  <div class="experts">
+    <span class="chap-num chap-num--solo">/ Expert Services</span>
+    <div class="experts__grid">
+      <article class="expert">
+        <img class="expert__image" src="assets/solutions/academy.png" alt="FTP Academy" loading="lazy" decoding="async" />
+        <header>
+          <h3>FTP Academy</h3>
+          <a class="expert__cta" href="https://academia.ftpporto.com" target="_blank" rel="noopener">
+            Visit Academy â†—
+          </a>
+        </header>
+        <div class="expert__intro">
+          <p>
+            An innovative learning platform designed to empower the
+            professionals of tomorrow. High-quality training programs across
+            a wide range of technology fields, with practical learning,
+            continuous development and tailored learning paths.
+          </p>
+          <p>
+            Open to candidates between 18 and 40 years old. No strict
+            academic prerequisites for beginner courses. What matters: genuine
+            interest in technology, motivation to learn and evolve.
+          </p>
+        </div>
+        <ul class="chips">
+          <li>Practical Learning</li>
+          <li>Tailored Paths</li>
+          <li>DGERT Certified</li>
+          <li>Mentorship</li>
+        </ul>
+      </article>
+
+      <article class="expert" data-expert="appstudio">
+        <img class="expert__image" src="assets/solutions/appstudio.jpg" alt="Appstudio" loading="lazy" decoding="async" />
+        <header>
+          <h3>Appstudio</h3>
+        </header>
+        <div class="expert__intro">
+          <p>
+            FTP's dedicated environment for designing, prototyping and
+            delivering custom business applications at speed. Modular
+            components and modern development practices translate complex
+            business requirements into functional digital products.
+          </p>
+          <p>
+            From internal tools to customer portals and mobile apps. We
+            combine reusable building blocks with tailored business logic so
+            every application fits operations and scales as they evolve.
+          </p>
+        </div>
+        <ul class="appstudio-caps">
+          <li><strong>Internal tools &amp; dashboards</strong> Operational apps that streamline daily work.</li>
+          <li><strong>Automation bots &amp; notifications</strong> Smart agents that monitor data and act.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="how-we-work">
+      <h4>How we work</h4>
+      <ol>
+        <li>
+          <strong>Discovery</strong>
+          <span>We sit with your team to understand the process, the pain points and the goal.</span>
+        </li>
+        <li>
+          <strong>Prototype</strong>
+          <span>We turn the idea into a working prototype quickly so you can react to something real.</span>
+        </li>
+        <li>
+          <strong>Build &amp; iterate</strong>
+          <span>We refine the solution with continuous feedback until it fits like a glove.</span>
+        </li>
+        <li>
+          <strong>Deploy &amp; support</strong>
+          <span>We ship it, train your team and stay close to evolve as your business changes.</span>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Trusted by -->
+  <div class="trusted">
+    <span class="chap-num chap-num--solo">/ Trusted by Leading Partners</span>
+    <div class="marquee marquee--clients">
+      <div class="marquee__track">
+        <span>Sanimaia</span><i>Â·</i>
+        <span>Edgar PraÃ§a</span><i>Â·</i>
+        <span>NorSafe</span><i>Â·</i>
+        <span>Nimco</span><i>Â·</i>
+        <span>Glintt Healthcare</span><i>Â·</i>
+        <span>BEIA</span><i>Â·</i>
+        <span>ARD Group</span><i>Â·</i>
+        <span>KAIST</span><i>Â·</i>
+        <span>Sanimaia</span><i>Â·</i>
+        <span>Edgar PraÃ§a</span><i>Â·</i>
+        <span>NorSafe</span><i>Â·</i>
+        <span>Nimco</span><i>Â·</i>
+        <span>Glintt Healthcare</span><i>Â·</i>
+        <span>BEIA</span><i>Â·</i>
+        <span>ARD Group</span><i>Â·</i>
+        <span>KAIST</span><i>Â·</i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     INTERNATIONAL R&D PROJECTS â€” full detail
+     ============================================================ -->
+<section id="projects" class="sec sec--projects">
+    <span class="chap-num chap-num--solo">/ International R&amp;D Projects</span>
+      Five projects.<br/>
+      Five countries. <em>One consortium pulse.</em>
+    </h2>
+    <p class="sec__lede">
+      The lab's active and recent international collaborations â€” the
+      Problem each one set out to solve, and the Solution we shipped.
+    </p>
+  </header>
+
+  <div class="iprojects">
+
+    <!-- OMD -->
+    <article class="iproject" id="proj-omd">
+      <header>
+        <div class="iproject__title">
+          <div class="iproject__titlecopy">
+            <h3>OMD</h3>
+            <span>Cognitive Service Demand Management</span>
+          </div>
+          <span class="iproject__logo" aria-hidden="true">
+            <img src="assets/blog/omd.png" alt="OMD project logo" loading="lazy" decoding="async" />
+          </span>
+        </div>
+        <div class="iproject__meta">
+          <span class="status status--done">Finished Â· 2022â€“2023</span>
+          <span>Cross-domain Â· 12 partners</span>
+        </div>
+      </header>
+      <div class="iproject__body">
+        <div>
+          <h4>Problem</h4>
+          <p>
+            Modern service organizations face increasing complexity in
+            managing incoming requests across multiple channels and domains.
+            Traditional e-commerce, ticketing and support systems struggle
+            with inefficient allocation, high operational costs, lack of
+            intelligent prioritization, limited NLP understanding and
+            fragmented knowledge bases.
+          </p>
+        </div>
+        <div>
+          <h4>Solution</h4>
+          <p>
+            A cross-domain cognitive service management platform leveraging
+            ML, Deep Learning, NLP and optimisation. Real-world use case
+            with <a href="https://www.nm4y.com" target="_blank" rel="noopener">Nimco</a> â€”
+            an AI-powered chatbot with text + voice input that understands
+            customer queries, extracts intent, applies ML filtering and
+            recommends footwear with personalised reasoning.
+          </p>
+        </div>
+      </div>
+      <footer>
+        <ul class="chips">
+          <li>NLP</li><li>ML</li><li>Speech-to-Text</li><li>Optimization</li>
+        </ul>
+        <div class="iproject__partners">
+          <strong>Partners (12):</strong>
+          <ul class="partner-logos" aria-label="OMD partners">
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/beia.png" alt="BEIA logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">BEIA</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/bigdata.png" alt="BigData logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">BigData</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/isep.png" alt="ISEP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ISEP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/caretronic.png" alt="Caretronic logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Caretronic</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/frontendart.png" alt="Frontendart logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Frontendart</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/ardgroup.png" alt="ARD Group logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ARD Group</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/experteam.png" alt="Experteam logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Experteam</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/hyperlink.png" alt="Hiperlink logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Hiperlink</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/eu-flag.png" alt="European Union logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">European Union</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/itea-logo.png" alt="ITEA 4 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ITEA 4</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/norte2030.png" alt="Norte 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Norte 2030</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/Portugal_2030.png" alt="Portugal 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Portugal 2030</span>
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </article>
+
+    <!-- EARS -->
+    <article class="iproject iproject--featured" id="proj-ears">
+      <header>
+        <div class="iproject__title">
+          <div class="iproject__titlecopy">
+            <h3>EARS</h3>
+            <span>Intelligent Recommendation for Remote Services</span>
+          </div>
+          <span class="iproject__logo" aria-hidden="true">
+            <img src="assets/blog/ears.png" alt="EARS project logo" loading="lazy" decoding="async" />
+          </span>
+        </div>
+        <div class="iproject__meta">
+          <span class="status status--ongoing">Ongoing Â· 2023â€“2026</span>
+          <span>NORTE2030-FEDER-00542300 Â· ITEA 21017</span>
+        </div>
+      </header>
+      <div class="iproject__body">
+        <div>
+          <h4>Problem</h4>
+          <p>
+            Existing Service Desk Management tools are predominantly focused
+            on the IT sector, and AI/ML/DL/NLP integration is still in early
+            stages. There is no framework today capable of delivering SDM
+            solutions that adapt across healthcare, e-commerce, marketing
+            and sales.
+          </p>
+        </div>
+        <div>
+          <h4>Solution</h4>
+          <p>
+            An innovative framework for the automatic and efficient
+            allocation of the most suitable agent to each request,
+            optimising remote support across multiple domains. Multi-domain
+            recommenders, explainable AI, advanced client/agent profiling
+            with emotional and behavioural signals, dynamic workflows.
+            Validated in nine sectors. Components released as open source.
+          </p>
+        </div>
+      </div>
+      <footer>
+        <ul class="chips">
+          <li>Recommender Systems</li><li>Explainable AI</li>
+          <li>User Modeling</li><li>Context-Aware</li><li>Adaptive Systems</li>
+        </ul>
+        <div class="iproject__partners">
+          <strong>Partners (14):</strong>
+          <ul class="partner-logos" aria-label="EARS partners">
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/ftp-logo.png" alt="FTP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">FTP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/isep.png" alt="ISEP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ISEP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/beia.png" alt="BEIA SRL logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">BEIA SRL</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/dextromedica.png" alt="DEXTROMEDICA logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">DEXTROMEDICA</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/glintt.png" alt="Glintt Healthcare logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Glintt Healthcare</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/sq1.png" alt="SQ1 Web Development logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">SQ1 Web Development</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/adesso.png" alt="Adesso Turkey logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Adesso Turkey</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/ardgroup.png" alt="ARD Grup logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ARD Grup</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/dogus.png" alt="Do&#287;u&#351; Bilgi logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Do&#287;u&#351; Bilgi</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/donanim.png" alt="Donan&#305;m Haber logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Donan&#305;m Haber</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/eu-flag.png" alt="European Union logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">European Union</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/itea-logo.png" alt="ITEA 4 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ITEA 4</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/norte2030.png" alt="Norte 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Norte 2030</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/Portugal_2030.png" alt="Portugal 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Portugal 2030</span>
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </article>
+
+    <!-- EXPAI -->
+    <article class="iproject" id="proj-expai">
+      <header>
+        <div class="iproject__title">
+          <h3>EXPAI</h3>
+          <span>SmartIndustry Â· Explainable AI for Industrial Control</span>
+        </div>
+        <div class="iproject__meta">
+          <span class="status status--ongoing">Ongoing Â· 2024â€“2026</span>
+          <span>ITEA 4 Â· Smart Industry</span>
+        </div>
+      </header>
+      <div class="iproject__body">
+        <div>
+          <h4>Problem</h4>
+          <p>
+            The transition to Smart Industry faces critical obstacles: AI
+            "black boxes" hard to interpret, traditional 3D modelling that
+            yields heavy geometry hindering real-time simulation, and a
+            lack of seamless integration between sensor data, autonomous
+            robotics and design tools.
+          </p>
+        </div>
+        <div>
+          <h4>Solution</h4>
+          <p>
+            An XAI framework that promotes a flexible, controlled,
+            transparent digital environment. Centralised sensor collection,
+            Computer Vision making AI decisions understandable, automatic
+            retopology and procedural modelling for real-time-ready
+            geometry, optimised AMR operation. Direct gains in
+            production-line efficiency and reliability.
+          </p>
+        </div>
+      </div>
+      <footer>
+        <ul class="chips">
+          <li>Explainable AI</li><li>Computer Vision</li>
+          <li>Predictive Maintenance</li><li>Anomaly Detection</li>
+          <li>AMR Robotics</li><li>3D Retopology</li>
+        </ul>
+        <div class="iproject__partners">
+          <strong>Partners (12):</strong>
+          <ul class="partner-logos" aria-label="EXPAI partners">
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/ftp-logo.png" alt="FTP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">FTP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/isep.png" alt="ISEP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ISEP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/expai/edgar-praca.png" alt="Edgar Pra&#231;a logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Edgar Pra&#231;a</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/expai/kiro.png" alt="KIRO logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">KIRO</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/expai/nanosystems.png" alt="Nanosystems logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Nanosystems</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/expai/accuro.png" alt="Accuro Technology logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Accuro Technology</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/beia.png" alt="BEIA SRL Belgium logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">BEIA SRL (Belgium)</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/expai/acd-bilgi.png" alt="ACD Bilgi Islem logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ACD Bilgi Islem</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/itea-logo.png" alt="ITEA logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ITEA</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/norte2030.png" alt="Norte 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Norte 2030</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/eu-flag.png" alt="European Union logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">European Union</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/Portugal_2030.png" alt="Portugal 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Portugal 2030</span>
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </article>
+
+    <!-- ELFMO -->
+    <article class="iproject" id="proj-elfmo">
+      <header>
+        <div class="iproject__title">
+          <div class="iproject__titlecopy">
+            <h3>ELFMO</h3>
+            <span>Enterprise Large Foundation Models</span>
+          </div>
+          <span class="iproject__logo" aria-hidden="true">
+            <img src="assets/blog/elfmo.png" alt="ELFMO project logo" loading="lazy" decoding="async" />
+          </span>
+        </div>
+        <div class="iproject__meta">
+          <span class="status status--ongoing">Ongoing Â· 2024â€“2027</span>
+          <span>ITEA Â· Norte 2030</span>
+        </div>
+      </header>
+      <div class="iproject__body">
+        <div>
+          <h4>Problem</h4>
+          <p>
+            Companies want the transformative potential of Generative AI
+            and LFMs (GPT, BARD, FALCON) but face substantial costs,
+            heavy resource allocation, strict compliance. Concerns around
+            data security, IP, bias, fairness, transparency and alignment
+            with GDPR / AI Act make reliable adoption difficult â€” and
+            monolithic ERPs (PHC, Primavera, Sage X3, SAP, Dynamics) limit
+            customisation and AI integration.
+          </p>
+        </div>
+        <div>
+          <h4>Solution</h4>
+          <p>
+            A risk-based engineering framework enabling fast, informed,
+            trustworthy LFM adoption in enterprise environments. Methods,
+            tools, sector benchmarks, open-source infrastructures, and
+            evidence-based evaluation aligned with GDPR + AI Act. National
+            use case: a modular integration platform evolving from monolith
+            to microservices, with a specialised PHC chatbot.
+          </p>
+        </div>
+      </div>
+      <footer>
+        <ul class="chips">
+          <li>Generative AI</li><li>LFM Adaptation</li>
+          <li>ERP Integration (PHC)</li><li>Modular Monolith â†’ Microservices</li>
+          <li>Open-source AI</li><li>GDPR Â· AI Act</li>
+        </ul>
+        <div class="iproject__partners">
+          <strong>Partners (16):</strong>
+          <ul class="partner-logos" aria-label="ELFMO partners">
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/ftp-logo.png" alt="FTP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">FTP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/isep.png" alt="ISEP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ISEP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/f-secure.png" alt="F-Secure logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">F-Secure</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/granlund.png" alt="Granlund Oy logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Granlund Oy</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/nosto.png" alt="Nosto Solutions logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Nosto Solutions</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/siili.png" alt="Siili Solutions logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Siili Solutions</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/solita.png" alt="Solita Oy logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Solita Oy</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/helsinki.png" alt="University of Helsinki logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">University of Helsinki</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/nannyml.png" alt="NannyML logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">NannyML</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/siemens.png" alt="Siemens Industry Software logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Siemens Industry Software</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/cic.png" alt="CIC Consulting Inform&#225;tico logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">CIC Consulting Inform&aacute;tico</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/elfmo/dextro.png" alt="DEXTROMEDICA logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">DEXTROMEDICA</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/itea-logo.png" alt="ITEA logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ITEA</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/norte2030.png" alt="Norte 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Norte 2030</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/eu-flag.png" alt="European Union logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">European Union</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/Portugal_2030.png" alt="Portugal 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Portugal 2030</span>
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </article>
+
+    <!-- CAPE -->
+    <article class="iproject" id="proj-cape">
+      <header>
+        <div class="iproject__title">
+          <div class="iproject__titlecopy">
+            <h3>CAPE</h3>
+            <span>Cognitive Assistant for Phygital Environments</span>
+          </div>
+          <span class="iproject__logo" aria-hidden="true">
+            <img src="assets/blog/cape.png" alt="CAPE project logo" loading="lazy" decoding="async" />
+          </span>
+        </div>
+        <div class="iproject__meta">
+          <span class="status status--ongoing">Ongoing Â· 2024â€“2027</span>
+          <span>NORTE0230-FEDER-01241200 Â· ITEA 4</span>
+        </div>
+      </header>
+      <div class="iproject__body">
+        <div>
+          <h4>Problem</h4>
+          <p>
+            The retail sector plays a crucial role in the EU economy but
+            faces significant challenges in sustainability, digitalisation
+            and skills. Single-modality systems and static in-store
+            experiences struggle to deliver the personalised, adaptive
+            interactions modern shoppers and employees expect.
+          </p>
+        </div>
+        <div>
+          <h4>Solution</h4>
+          <p>
+            An initiative transforming the shopping experience and the
+            working environment in retail through AI, Blockchain, IoT and
+            Deep Learning. Personalised experiences, optimised robots
+            and kiosks, innovative resource management, employee tracking
+            and customer engagement â€” five use cases spanning consumer
+            UX, personalisation, satisfaction, manufacturing safety and
+            store operations.
+          </p>
+        </div>
+      </div>
+      <footer>
+        <ul class="chips">
+          <li>Artificial Intelligence</li><li>Blockchain</li>
+          <li>IoT</li><li>Deep Learning</li>
+          <li>Computer Vision</li><li>Recommender Systems</li>
+        </ul>
+        <div class="iproject__partners">
+          <strong>Partners (19):</strong>
+          <ul class="partner-logos" aria-label="CAPE partners">
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/ftp-logo.png" alt="FTP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">FTP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/isep.png" alt="ISEP logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ISEP</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/sanimaia.png" alt="Sanimaia logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Sanimaia</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/idb.png" alt="IDB Inc. logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">IDB Inc.</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/kaist.png" alt="KAIST logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">KAIST</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/smartcore.png" alt="SmartCore logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">SmartCore</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/beia-consult.png" alt="BEIA Consult logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">BEIA Consult</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/enverse.png" alt="Enverse logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Enverse</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/defacto.png" alt="DEFACTO logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">DEFACTO</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/dogus.png" alt="Do&#287;u&#351; Tekno logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Do&#287;u&#351; Tekno</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/inosens.png" alt="inosens logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">inosens</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/kocsistem.png" alt="Ko&#231;Sistem logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Ko&ccedil;Sistem</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/koctas.png" alt="Ko&#231;ta&#351; logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Ko&ccedil;ta&#351;</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/tav.png" alt="TAV Technologies logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">TAV Technologies</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/cape/teknasyon.png" alt="TEKNASYON logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">TEKNASYON</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/eu-flag.png" alt="European Union logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">European Union</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/itea-logo.png" alt="ITEA 4 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">ITEA 4</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/Projects/norte2030.png" alt="Norte 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Norte 2030</span>
+            </li>
+            <li class="partner-logo">
+              <span class="partner-logo__mark">
+                <img src="assets/brands/Portugal_2030.png" alt="Portugal 2030 logo" loading="lazy" decoding="async" />
+              </span>
+              <span class="partner-logo__name">Portugal 2030</span>
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     PUBLISHED â€” Papers
+     ============================================================ -->
+<section id="papers" class="sec sec--papers">
+  <header class="sec__head">
+    <span class="chap-num chap-num--solo">/ Published Â· 2025â€“2026</span>
+    <h2 class="sec__title">Peer-reviewed. <em>Reproducible.</em></h2>
+    <p class="sec__lede">
+      The lab's work is checked in the only place that counts â€” by other labs.
+      A non-exhaustive selection from the last 18 months.
+    </p>
+  </header>
+
+  <ul class="papers">
+    <li>
+      <div class="paper__year">2026</div>
+      <div>
+        <h4>A Literature Review about Federated Learning in Recommendation Systems</h4>
+        <span class="paper__venue">IEEE Â· 2026</span>
+      </div>
+      <a class="paper__doi" href="https://ieeexplore.ieee.org/document/11498129" target="_blank" rel="noopener">IEEE &#8599;</a>
+    </li>
+    <li>
+      <div class="paper__year">2026</div>
+      <div>
+        <h4>A Blockchain-based Federated Learning Implementation Within a Recommendation System Landscape</h4>
+        <span class="paper__venue">Procedia Computer Science Â· Procedia</span>
+      </div>
+      <a class="paper__doi" href="https://doi.org/10.1016/j.procs.2026.03.021" target="_blank" rel="noopener">DOI &#8599;</a>
+    </li>
+    <li>
+      <div class="paper__year">2025</div>
+      <div>
+        <h4>Security-Enhancing Mechanisms to Strengthen Privacy on Federated Learning Based Recommendation Systems</h4>
+        <span class="paper__venue">IEEE IWIS Â· 2025</span>
+      </div>
+      <a class="paper__doi" href="https://doi.org/10.1109/IWIS66215.2025.11142401" target="_blank" rel="noopener">DOI &#8599;</a>
+    </li>
+    <li>
+      <div class="paper__year">2025</div>
+      <div>
+        <h4>Literary Review for Enhanced Personalized Recommendations with Federated Learning &amp; Multimodel Emotion Recognition</h4>
+        <span class="paper__venue">IEEE IDSTA Â· 2025</span>
+      </div>
+      <a class="paper__doi" href="https://doi.org/10.1109/IDSTA66210.2025.11202847" target="_blank" rel="noopener">DOI &#8599;</a>
+    </li>
+    <li>
+      <div class="paper__year">2025</div>
+      <div>
+        <h4>Local Vs Server Differential Privacy Analysis Regarding the Trade-Off Between Security and Recommendation Quality</h4>
+        <span class="paper__venue">IEEE BigData Â· 2025</span>
+      </div>
+      <a class="paper__doi" href="https://doi.org/10.1109/BigData66926.2025.11402459" target="_blank" rel="noopener">DOI &#8599;</a>
+    </li>
+  </ul>
+
+  <div class="referrers">
+    <span class="referrers__label">Backed by</span>
+    <div class="referrers__logos">
+      <a class="referrer-badge referrer-badge--itea" href="https://itea4.org" target="_blank" rel="noopener" aria-label="ITEA">
+        <img src="assets/brands/itea-logo.png" alt="ITEA logo" loading="lazy" decoding="async" />
+      </a>
+      <a class="referrer-badge referrer-badge--ani" href="https://www.ani.pt" target="_blank" rel="noopener" aria-label="ANI">
+        <img src="assets/brands/ani-logo.png" alt="ANI logo" loading="lazy" decoding="async" />
+      </a>
+      <a class="referrer-badge referrer-badge--eu" href="https://european-union.europa.eu" target="_blank" rel="noopener" aria-label="European Union">
+        <img src="assets/brands/eu-flag.png" alt="European Union logo" loading="lazy" decoding="async" />
+      </a>
+      <span class="referrer-badge referrer-badge--norte" aria-label="Norte 2030">
+        <img src="assets/Projects/norte2030.png" alt="Norte 2030 logo" loading="lazy" decoding="async" />
+      </span>
+    </div>
+    <a href="https://itea4.org" target="_blank" rel="noopener">ITEA</a><i>Â·</i>
+    <a href="https://www.ani.pt" target="_blank" rel="noopener">ANI</a><i>Â·</i>
+    <a href="https://european-union.europa.eu" target="_blank" rel="noopener">European Union</a><i>Â·</i>
+    <span>Norte 2030</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     LAB TEAM â€” all 9 members
+     ============================================================ -->
+<section id="team" class="sec sec--team">
+  <header class="sec__head">
+    <span class="chap-num chap-num--solo">/ The Lab Team</span>
+    <h2 class="sec__title">
+      The minds bridging<br/>
+      <em>scientific discovery</em> and <em>business reality</em>.
+    </h2>
+  </header>
+
+  <div class="team-grid">
+    <article class="member member--lead">
+      <figure class="member__figure">
+        <video class="member__photo" autoplay muted loop playsinline preload="metadata" poster="Alters_Img/fabio.jpeg" aria-label="FÃ¡bio portrait video">
+          <source src="Alters_Img/fabio_video.mp4" type="video/mp4" />
+        </video>
+      </figure>
+      <span class="member__role">Department Head</span>
+      <h3>FÃ¡bio</h3>
+      <span class="member__spec">Department Leadership &amp; Strategy</span>
+      <blockquote>Companies that integrate applied AI don't react to the market â€” they anticipate it.</blockquote>
+    </article>
+
+    <article class="member">
+      <figure class="member__figure">
+        <img class="member__photo" src="Alters_Img/andre.png" alt="AndrÃ© portrait" loading="lazy" decoding="async" />
+      </figure>
+      <span class="member__role">Technical Lead</span>
+      <h3>AndrÃ©</h3>
+      <span class="member__spec">FTP Academia &amp; Executive Strategy</span>
+      <blockquote>Limits shape vision. Direction transforms imagination into reality.</blockquote>
+    </article>
+
+    <article class="member">
+      <figure class="member__figure">
+        <img class="member__photo" src="Alters_Img/isabel.png" alt="Isabel portrait" loading="lazy" decoding="async" />
+      </figure>
+      <span class="member__role">Project Manager</span>
+      <h3>Isabel</h3>
+      <span class="member__spec">About Us, Blog &amp; General Management</span>
+      <blockquote>From the chaos of ideas to the elegance of outcomes â€” turning them into flight.</blockquote>
+    </article>
+
+    <article class="member">
+      <figure class="member__figure">
+        <img class="member__photo" src="Alters_Img/teixeira.png" alt="Teixeira portrait" loading="lazy" decoding="async" />
+      </figure>
+      <span class="member__role">R&amp;D Developer</span>
+      <h3>Teixeira</h3>
+      <span class="member__spec">AI &amp; ELFMO Project</span>
+      <blockquote>With AI, the limit is no longer time â€” it is imagination.</blockquote>
+    </article>
+
+    <article class="member">
+      <figure class="member__figure">
+        <img class="member__photo" src="Alters_Img/couto.png" alt="Couto portrait" loading="lazy" decoding="async" />
+      </figure>
+      <span class="member__role">R&amp;D Developer</span>
+      <h3>Couto</h3>
+      <span class="member__spec">AI &amp; ELFMO Project</span>
+    </article>
+
+    <article class="member">
+      <figure class="member__figure">
+        <img class="member__photo" src="Alters_Img/cruz.png" alt="Cruz portrait" loading="lazy" decoding="async" />
+      </figure>
+      <span class="member__role">R&amp;D Developer</span>
+      <h3>Cruz</h3>
+      <span class="member__spec">Computer Vision &amp; E-commerce</span>
+      <blockquote>Innovation is born when we turn recurring effort into permanent solutions.</blockquote>
+    </article>
+
+    <article class="member">
+      <figure class="member__figure">
+        <img class="member__photo" src="Alters_Img/gaspar.png" alt="Gaspar portrait" loading="lazy" decoding="async" />
+      </figure>
+      <span class="member__role">R&amp;D Developer</span>
+      <h3>Gaspar</h3>
+      <span class="member__spec">ERP Automation &amp; EARS</span>
+      <blockquote>When all think alike, then no one is thinking.</blockquote>
+    </article>
+
+    <article class="member">
+      <figure class="member__figure">
+        <img class="member__photo" src="Alters_Img/mariana.png" alt="Mariana portrait" loading="lazy" decoding="async" />
+      </figure>
+      <span class="member__role">R&amp;D Developer</span>
+      <h3>Mariana</h3>
+      <span class="member__spec">3D Graphics &amp; EXPAI</span>
+      <blockquote>Blending a little bit of magic with a lot of intelligence to build the future.</blockquote>
+    </article>
+
+    <article class="member">
+      <span class="member__role">R&amp;D Developer</span>
+      <h3>Tiago</h3>
+      <span class="member__spec">Technical Support &amp; Development</span>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================================
+     BLOG â€” 3 articles
+     ============================================================ -->
+<section id="blog" class="sec sec--blog">
+  <header class="sec__head">
+    <span class="chap-num chap-num--solo">/ FTP Insights &amp; Innovation</span>
+      Field notes from the <em>frontiers</em>.
+    </h2>
+    <p class="sec__lede">
+      Exploring AI, international R&amp;D collaborations, and industrial
+      technology â€” straight from the consortia.
+    </p>
+  </header>
+
+  <div class="blog-grid">
+
+    <!-- Article 1 -->
+    <article class="post post--featured post--detail">
+      <figure class="post__cover" data-blog-cover="ears-ankara-review">
+        <img src="assets/blog/ears/ears_2.jpg" alt="EARS workshop participants in the review room in Ankara" loading="lazy" decoding="async" />
+      </figure>
+      <div class="post__meta">
+        <span class="post__cat">International Projects</span>
+        <span class="post__date">04â€“05 Nov 2025 Â· Ankara, TÃ¼rkiye</span>
+      </div>
+      <h3>EARS Project â€” Plenary Meeting in Ankara</h3>
+      <p class="post__lead">
+        On November 4 and 5, 2025, Ankara became the meeting point for the
+        international consortium of the EARS project â€” Environment Adaptive
+        Recommendation System. At the facilities of partner ARD Group in the
+        Turkish capital, the teams gathered for two focused working days, where
+        technical progress gave way to concrete decisions and strategic
+        alignment gained the solidity that only in-person presence can provide.
+      </p>
+      <p>
+        The digital world is, by nature, dynamic. Contexts shift, users
+        evolve, and needs transform at a pace that traditional systems
+        struggle to match. EARS was created precisely to answer this
+        challenge: to develop a recommendation system capable of interpreting
+        data in real time, adapting to complex environments, and continuously
+        improving the experience of its users.
+      </p>
+      <p>
+        To make that possible, the project combines Artificial Intelligence
+        technologies, data integration, and advanced recommendation models,
+        validated across different use cases by a consortium of international
+        partners with complementary expertise. It is an approach that
+        recognizes that truly robust solutions are built in collaboration.
+      </p>
+      <p>
+        FTP had a particularly relevant role at this plenary as the leader of
+        WP5 â€” Integration, Pilots and Validation â€” the work package that
+        ensures everything developed within the project actually finds
+        application in the real world. The meeting in Ankara was an
+        opportunity to assess the progress of the ongoing activities, clarify
+        open technical questions, and prepare the next milestones for
+        development, integration, and demonstration.
+      </p>
+      <p>
+        Some issues resist video calls and email threads. The technical
+        complexity of EARS â€” with multiple partners, interdependent
+        technological components, and distinct use cases â€” requires, at
+        certain moments, the same table and the same space. Ankara was one of
+        those moments: two days in which doubts were resolved in minutes,
+        decisions that had been pending for weeks were taken together, and
+        coordination between teams gained a fluidity that distance rarely
+        allows.
+      </p>
+      <p>
+        More than a technical status point, this plenary was a moment for
+        consolidating the relationships that sustain the project, strengthening
+        communication, aligning expectations, and creating the human
+        conditions for the next stages to unfold with greater confidence and
+        effectiveness.
+      </p>
+      <p>
+        EARS is a reminder that technological innovation always has two
+        inseparable dimensions: the quality of the solutions being developed,
+        and the ability of the people developing them to work together, align
+        their visions, and turn technical knowledge into results with real
+        impact. Ankara reinforced both.
+      </p>
+      <p>
+        Because to innovate is also to integrate â€” technologies, data,
+        perspectives, and people.
+      </p>
+      <span class="post__tag">EARS Â· ITEA</span>
+    </article>
+
+    <!-- Article 2 -->
+    <article class="post post--featured post--detail">
+      <figure class="post__cover" data-blog-cover="expai-korea-plenary">
+        <img src="assets/blog/expai-korea/expai-korea-office.jpeg" alt="EXPAI consortium members during the Korea plenary visit" loading="lazy" decoding="async" />
+      </figure>
+      <div class="post__meta">
+        <span class="post__cat">International Projects</span>
+        <span class="post__date">15 Apr 2026 Â· Daegu, South Korea</span>
+      </div>
+      <h3>EXPAI Korea Plenary</h3>
+      <p class="post__lead">
+        Between April 13 and 15, Daegu opened the doors of the EXPAI project
+        to the world. At Nanosystems' facilities, the Portuguese, Korean
+        and Spanish consortia met for a plenary that was much more than a
+        technical agenda â€” it was a meeting of minds, cultures and shared
+        ambitions.
+      </p>
+      <p>
+        Significant advances were discussed: Portugal's path on automatic
+        retopology, the potential of combining Korean LiDAR sensors with
+        Portuguese 3D scanners, data interoperability between partners,
+        common APIs, and integration of all use cases into the platform
+        developed by the Spanish consortium for the next ITEA review.
+      </p>
+      <p>
+        Cross-cutting all advances, Explainable AI (XAI) asserts itself as
+        a strategic axis of the consortium â€” systems not only intelligent,
+        but transparent, interpretable and truly useful.
+      </p>
+      <span class="post__tag">EXPAI Â· ITEA 4</span>
+    </article>
+
+    <!-- Article 3 -->
+    <article class="post post--detail">
+      <figure class="post__cover" data-blog-cover="elfmo-porto">
+        <img src="assets/blog/elfmo/ELFMO_3.jpeg" alt="ELFMO participants outside the Porto venue" loading="lazy" decoding="async" />
+      </figure>
+      <div class="post__meta">
+        <span class="post__cat">GenAI</span>
+        <span class="post__date">20 Jan 2025 Â· Porto</span>
+      </div>
+      <h3>ELFMO in Porto</h3>
+      <p>
+        How we are bringing Large Foundation Models to the local enterprise
+        ecosystem â€” methods, tools, sector benchmarks and open-source
+        infrastructures for reliable adaptation, with evaluation aligned
+        with GDPR and the AI Act.
+      </p>
+      <span class="post__tag">ELFMO Â· GenAI</span>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT â€” Who we are + Mission + Stats + Security + Global Reach
+     ============================================================ -->
+<section id="about" class="sec sec--about">
+  <header class="sec__head">
+    <span class="chap-num chap-num--solo">/ About</span>
+    <h2 class="sec__title">
+      Innovating at the intersection of<br/>
+      <em>Enterprise Management</em> &amp; <em>Artificial Intelligence</em>.
+    </h2>
+  </header>
+
+  <div class="about__grid">
+    <article class="about__who">
+      <span class="sec__kicker">Who We Are</span>
+      <p>
+        FTP is a Portuguese technology company based in Porto with a
+        multidisciplinary team of approximately 30 specialists. Originally
+        founded in 1999 to implement and support PHC management software,
+        FTP has evolved into a global technology provider. Our portfolio now
+        spans <strong>Artificial Intelligence</strong>,
+        <strong>Bespoke Software Development</strong>,
+        <strong>Cybersecurity</strong>, and
+        <strong>Infrastructure Administration</strong>.
+      </p>
+    </article>
+
+    <aside class="about__mission">
+      <span class="sec__kicker">Our Mission</span>
+      <blockquote>
+        To transform scientific research and academic investigation into
+        applied, high-impact <em>enterprise solutions</em>.
+      </blockquote>
+    </aside>
+  </div>
+
+  <ol class="about__stats">
+    <li><strong>~30</strong><span>Specialists</span></li>
+    <li><strong>Global</strong><span>Presence</span></li>
+    <li><strong>AI &amp; R&amp;D</strong><span>Focus</span></li>
+    <li><strong>Full-Stack</strong><span>Services</span></li>
+  </ol>
+
+  <div class="about__split">
+    <article>
+      <span class="sec__kicker">Operational Excellence &amp; Security</span>
+      <p>
+        FTP has transitioned to a mature, documented information security
+        framework aligned with ISO/IEC 27001 principles and GDPR compliance.
+        For FTP, security is a strategic priority that ensures contractual
+        trust and operational resilience for our clients.
+      </p>
+      <ul class="badge-row">
+        <li>ISO/IEC 27001</li>
+        <li>GDPR</li>
+        <li>AI Act aware</li>
+        <li>PME LÃ­der</li>
+        <li>DGERT certified</li>
+      </ul>
+    </article>
+    <article>
+      <span class="sec__kicker">Global Reach</span>
+      <p>
+        From Porto to the world. Active R&amp;D consortia and field plenaries
+        across <strong>Portugal</strong>, <strong>TÃ¼rkiye</strong>,
+        <strong>South Korea</strong>, <strong>Spain</strong>, <strong>Romania</strong>,
+        <strong>Belgium</strong>, <strong>Finland</strong>.
+      </p>
+      <ul class="badge-row">
+        <li>Porto Â· HQ</li>
+        <li>Ankara Â· EARS</li>
+        <li>Daegu Â· EXPAI</li>
+        <li>Helsinki Â· ELFMO</li>
+        <li>Madrid Â· EXPAI</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT â€” Form + general info + map
+     ============================================================ -->
+<section id="precontact" class="sec sec--precontact"></section>
+
+<section id="contact" class="sec sec--contact">
+  <header class="sec__head">
+    <span class="chap-num chap-num--solo">/ Let's Collaborate</span>
+    <h2 class="sec__title">
+      Start a partnership with the<br/>
+      <em>FTP AI Lab</em>.
+    </h2>
+    <p class="sec__lede">
+      Get in touch with the FTP AI Lab team. We're ready to build the
+      future together.
+    </p>
+  </header>
+
+  <div class="contact-grid">
+
+    <form class="contact-form" data-contact-form
+          action="mailto:geral@ftpporto.com"
+          method="post" enctype="text/plain">
+      <h3>Start a Partnership</h3>
+      <div class="field-row">
+        <label class="field">
+          <span>First Name</span>
+          <input type="text" name="firstName" required />
+        </label>
+        <label class="field">
+          <span>Last Name</span>
+          <input type="text" name="lastName" required />
+        </label>
+      </div>
+      <label class="field">
+        <span>Organization</span>
+        <input type="text" name="organization" />
+      </label>
+      <label class="field">
+        <span>Email</span>
+        <input type="email" name="email" required />
+      </label>
+      <label class="field">
+        <span>Subject</span>
+        <select name="subject" required>
+          <option value="">Select a subjectâ€¦</option>
+          <option value="Partnership">Partnership</option>
+          <option value="R&amp;D Inquiry">R&amp;D Inquiry</option>
+          <option value="Solutions">Solutions</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Message</span>
+        <textarea name="message" rows="5" required></textarea>
+      </label>
+      <button type="submit" class="btn btn--primary">
+        <span>Send Message</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+
+    <aside class="contact-info">
+      <div>
+        <span class="info__label">General Information</span>
+        <a class="info__line" href="tel:+351229774530">+351 229 774 530</a>
+        <a class="info__line" href="mailto:geral@ftpporto.com">geral@ftpporto.com</a>
+      </div>
+      <div>
+        <span class="info__label">Our Location</span>
+        <address>
+          Rua Professor Correia de SÃ¡ 56<br/>
+          4445-570 Ermesinde<br/>
+          Porto Â· Portugal
+        </address>
+        <div class="contact-map">
+          <iframe
+            src="https://www.google.com/maps?q=Rua+Professor+Correia+de+S%C3%A1+56,+4445-570+Ermesinde,+Porto,+Portugal&z=17&output=embed"
+            title="FTP AI Lab location on Google Maps"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <span class="info__label">Channels</span>
+        <a class="info__line" href="https://ftpporto.com" target="_blank" rel="noopener">ftpporto.com â†—</a>
+        <a class="info__line" href="https://academia.ftpporto.com" target="_blank" rel="noopener">academia.ftpporto.com â†—</a>
+        <a class="info__line" href="https://www.linkedin.com/company/ftpporto/" target="_blank" rel="noopener">LinkedIn â†—</a>
+        <a class="info__line" href="https://www.instagram.com/ftpporto/" target="_blank" rel="noopener">Instagram â†—</a>
+        <a class="info__line" href="https://www.facebook.com/ftpporto/" target="_blank" rel="noopener">Facebook â†—</a>
+      </div>
+    </aside>
+
+  </div>
+
+</section>
+
+
+</main>
+
+<footer class="foot">
+  <div class="foot__cols">
+
+    <div class="foot__col foot__col--brand">
+      <div class="foot__brand">
+        <img class="foot__brand-logo" src="assets/ftp-logo.png" alt="FTP" width="56" height="22" loading="lazy" decoding="async" />
+        <span class="foot__brand-suffix">Â· Lab</span>
+      </div>
+      <p class="foot__tagline">
+        Digital Innovation Studio.<br/>
+        A Portuguese R&amp;D house quietly building the layer underneath.
+      </p>
+      <ul class="foot__social">
+        <li><a href="https://www.linkedin.com/company/ftpporto/" target="_blank" rel="noopener">LinkedIn â†—</a></li>
+        <li><a href="https://www.instagram.com/ftpporto/" target="_blank" rel="noopener">Instagram â†—</a></li>
+        <li><a href="https://www.facebook.com/ftpporto/" target="_blank" rel="noopener">Facebook â†—</a></li>
+      </ul>
+    </div>
+
+    <div class="foot__col">
+      <h4>Latest Blog Posts</h4>
+      <ul>
+        <li><a href="#blog">Innovation in Ankara Â· EARS</a></li>
+        <li><a href="#blog">South Korea Expansion Â· EXPAI</a></li>
+        <li><a href="#blog">ELFMO in Porto</a></li>
+      </ul>
+    </div>
+
+    <div class="foot__col">
+      <h4>Institutional References</h4>
+      <ul class="foot__refs">
+        <li>
+          <a class="referrer-badge referrer-badge--itea" href="https://itea4.org" target="_blank" rel="noopener" aria-label="ITEA">
+            <img src="assets/brands/itea-logo.png" alt="ITEA logo" loading="lazy" decoding="async" />
+          </a>
+        </li>
+        <li>
+          <a class="referrer-badge referrer-badge--ani" href="https://www.ani.pt" target="_blank" rel="noopener" aria-label="ANI">
+            <img src="assets/brands/ani-logo.png" alt="ANI logo" loading="lazy" decoding="async" />
+          </a>
+        </li>
+        <li>
+          <a class="referrer-badge referrer-badge--eu" href="https://european-union.europa.eu" target="_blank" rel="noopener" aria-label="European Union">
+            <img src="assets/brands/eu-flag.png" alt="European Union logo" loading="lazy" decoding="async" />
+          </a>
+        </li>
+      </ul>
+      <ul>
+        <li><a href="https://itea4.org" target="_blank" rel="noopener">ITEA â†—</a></li>
+        <li><a href="https://www.ani.pt" target="_blank" rel="noopener">ANI Â· AgÃªncia Nacional de InovaÃ§Ã£o â†—</a></li>
+        <li><a href="https://european-union.europa.eu" target="_blank" rel="noopener">European Union â†—</a></li>
+      </ul>
+    </div>
+
+    <div class="foot__col">
+      <h4>Latest Papers</h4>
+      <ul>
+        <li><a href="https://doi.org/10.1016/j.procs.2026.03.021" target="_blank" rel="noopener">Blockchain-based Federated Learning in Recommendation Systems (2026)</a></li>
+        <li><a href="https://doi.org/10.1109/IWIS66215.2025.11142401" target="_blank" rel="noopener">Security-Enhancing Mechanisms for FL-Based Recommendations (2025)</a></li>
+        <li><a href="https://doi.org/10.1109/BigData66926.2025.11402459" target="_blank" rel="noopener">Local Vs Server Differential Privacy in Recommendations (2025)</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="foot__legal-row">
+    <span>Â© <span data-year>2026</span> FTP â€” SoluÃ§Ãµes Empresariais. All rights reserved.</span>
+    <span>EN Â· PT Â· FR Â· ES</span>
+    <span>ISO/IEC 27001 Â· GDPR Â· AI Act aware</span>
+    <span>Made in Porto.</span>
+  </div>
+</footer>
+
+<script src="translations/en.js" defer></script>
+<script src="translations/pt.js" defer></script>
+<script src="translations/es.js" defer></script>
+<script src="translations/fr.js" defer></script>
+<script src="script.js" defer></script>
+</body>
+</html>
