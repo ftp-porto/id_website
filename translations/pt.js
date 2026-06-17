@@ -115,7 +115,7 @@ window.FTP_TRANSLATIONS.pt = {
         title: "ELFMO",
         sub: "Enterprise Large Foundation Models",
         bodyHtml:
-          "Um enquadramento de engenharia baseado em risco que permite às empresas adotar <em>foundation models</em> sem perder controlo sobre dados, propriedade intelectual ou conformidade. Integração modular com ERP. Chatbot especializado em PHC. Modelos fundacionais dentro dos sistemas que o negócio já utiliza.",
+          "Um enquadramento de engenharia baseado em risco que permite às empresas adotar <em>foundation models</em> sem perder controlo sobre dados, propriedade intelectual ou conformidade. Integração modular com ERP. Chatbot especializado em Cegid PHC. Modelos fundacionais dentro dos sistemas que o negócio já utiliza.",
         chips: ["IA Generativa", "Adaptação LFM", "Integração ERP", "RGPD · AI Act"],
       },
       {
@@ -385,12 +385,12 @@ window.FTP_TRANSLATIONS.pt = {
         id: "sol-erp",
         ariaLabel: "Assistente Virtual ERP — demonstração ao vivo",
         title: "Assistente Virtual ERP",
-        tag: "PHC · Sage · Primavera",
+        tag: "Cegid PHC · Sage · Cegid Primavera",
         lead:
           "Uma interface conversacional inteligente que simplifica a forma como as empresas interagem com os seus sistemas de gestão — faturas, relatórios, previsões e respostas, sem menus.",
         intro: [
           "O nosso Assistente Virtual ERP transforma o ERP de uma <em>ferramenta orientada por menus</em> num <em>parceiro conversacional</em>. Em vez de navegar por formulários e relatórios, o utilizador pergunta e o sistema responde com base nos seus próprios dados.",
-          "O assistente liga-se diretamente ao PHC, Sage, Primavera e outros ERPs, juntando <em>compreensão de linguagem natural</em> com lógica de negócio específica para garantir respostas contextuais e operacionalmente corretas.",
+          "O assistente liga-se diretamente ao Cegid PHC, Sage, Cegid Primavera e outros ERPs, juntando <em>compreensão de linguagem natural</em> com lógica de negócio específica para garantir respostas contextuais e operacionalmente corretas.",
         ],
         blocks: [
           {
@@ -426,7 +426,7 @@ window.FTP_TRANSLATIONS.pt = {
                   "Geração automática de documentos",
                   "Previsão com IA treinada no histórico do cliente",
                   "Agregação de dados entre módulos e sistemas",
-                  "Conectores API ERP personalizados — PHC, Sage, Primavera e mais",
+                  "Conectores API ERP personalizados — Cegid PHC, Sage, Cegid Primavera e mais",
                 ],
               },
             ],
@@ -639,7 +639,7 @@ window.FTP_TRANSLATIONS.pt = {
           { title: "Bots de automação e notificações", text: "Agentes inteligentes que monitorizam os seus dados e agem — alertas, seguimentos, escalonamentos." },
           { title: "Portais e aplicações web para clientes", text: "Experiências com a sua marca para os seus clientes interagirem com os seus serviços." },
           { title: "Aplicações móveis", text: "Apps iOS e Android ligadas aos seus sistemas existentes." },
-          { title: "Integrações com o seu ERP", text: "Ligamos o PHC e outros sistemas ao resto da sua infraestrutura digital." },
+          { title: "Integrações com o seu ERP", text: "Ligamos o Cegid PHC e outros sistemas ao resto da sua infraestrutura digital." },
           { title: "Workflows orientados por dados", text: "Pipelines que transformam dados operacionais em ações claras e concretas." },
         ],
       },
@@ -767,13 +767,13 @@ window.FTP_TRANSLATIONS.pt = {
         status: "Em curso · 2024–2027",
         meta: "ITEA · Norte 2030",
         problemHtml:
-          "As empresas querem aproveitar o potencial transformador da IA Generativa e dos Modelos de Fundação de Grande Escala (LFMs), como GPT, BARD ou FALCON, mas enfrentam custos substanciais, elevada alocação de recursos e requisitos de conformidade rigorosos. Preocupações com segurança de dados, propriedade intelectual, viés, justiça, suscetibilidade a erros, transparência e alinhamento com as regulamentações europeias (GDPR, AI Act) dificultam uma adoção fiável. Além disso, os sistemas ERP monolíticos tradicionais (PHC, Primavera, Sage X3, SAP, Microsoft Dynamics 365) limitam a personalização, escalabilidade e integração de novas capacidades de IA.",
+          "As empresas querem aproveitar o potencial transformador da IA Generativa e dos Modelos de Fundação de Grande Escala (LFMs), como GPT, BARD ou FALCON, mas enfrentam custos substanciais, elevada alocação de recursos e requisitos de conformidade rigorosos. Preocupações com segurança de dados, propriedade intelectual, viés, justiça, suscetibilidade a erros, transparência e alinhamento com as regulamentações europeias (GDPR, AI Act) dificultam uma adoção fiável. Além disso, os sistemas ERP monolíticos tradicionais (Cegid PHC, Cegid Primavera, Sage X3, SAP, Microsoft Dynamics 365) limitam a personalização, escalabilidade e integração de novas capacidades de IA.",
         solutionHtml:
-          "O ELFMO disponibiliza uma framework de engenharia e integração baseada em riscos que permite uma adoção rápida, informada e confiável dos LFMs em ambiente empresarial. Fornece métodos, ferramentas, benchmarks setoriais e infraestruturas open-source para a adaptação fiável dos modelos a tarefas específicas, com procedimentos de avaliação baseados em evidências e alinhados com o GDPR e o AI Act. O caso de uso nacional desenvolve uma plataforma integradora modular — evoluindo de monolítico modular para microserviços — que se conecta a ERPs existentes e adiciona capacidades de IA, e-commerce e gestão automatizada, incluindo um chatbot especializado para PHC suportado por uma API ERP personalizada.",
+          "O ELFMO disponibiliza uma framework de engenharia e integração baseada em riscos que permite uma adoção rápida, informada e confiável dos LFMs em ambiente empresarial. Fornece métodos, ferramentas, benchmarks setoriais e infraestruturas open-source para a adaptação fiável dos modelos a tarefas específicas, com procedimentos de avaliação baseados em evidências e alinhados com o GDPR e o AI Act. O caso de uso nacional desenvolve uma plataforma integradora modular — evoluindo de monolítico modular para microserviços — que se conecta a ERPs existentes e adiciona capacidades de IA, e-commerce e gestão automatizada, incluindo um chatbot especializado para Cegid PHC suportado por uma API ERP personalizada.",
         chips: [
           "IA Generativa",
           "Adaptação LFM",
-          "Integração ERP (PHC)",
+          "Integração ERP (Cegid PHC)",
           "Monólito Modular → Microserviços",
           "IA Open-source",
           "RGPD · AI Act",
@@ -971,7 +971,7 @@ window.FTP_TRANSLATIONS.pt = {
     lede: "Inovando na interseção da Gestão Empresarial e da Inteligência Artificial.",
     whoTitle: "Quem Somos",
     whoHtml:
-      "A FTP é uma empresa portuguesa de tecnologia sediada no Porto, com uma equipa multidisciplinar de aproximadamente 30 especialistas. Fundada originalmente para implementar e dar suporte ao software de gestão PHC, a FTP evoluiu para um fornecedor global de tecnologia. O nosso portfólio abrange agora <strong>Inteligência Artificial</strong>, <strong>Desenvolvimento de Software à Medida</strong>, <strong>Cibersegurança</strong> e <strong>Administração de Infraestruturas</strong>.",
+      "A FTP é uma empresa portuguesa de tecnologia sediada no Porto, com uma equipa multidisciplinar de aproximadamente 30 especialistas. Fundada originalmente para implementar e dar suporte ao software de gestão Cegid PHC, a FTP evoluiu para um fornecedor global de tecnologia. O nosso portfólio abrange agora <strong>Inteligência Artificial</strong>, <strong>Desenvolvimento de Software à Medida</strong>, <strong>Cibersegurança</strong> e <strong>Administração de Infraestruturas</strong>.",
     missionTitle: "A Nossa Missão",
     missionHtml:
       "Transformar a investigação científica e académica em soluções empresariais aplicadas e de alto impacto.",

@@ -115,7 +115,7 @@ window.FTP_TRANSLATIONS.fr = {
         title: "ELFMO",
         sub: "Enterprise Large Foundation Models",
         bodyHtml:
-          "Un cadre d'ingénierie fondé sur le risque qui permet aux entreprises d'adopter des <em>foundation models</em> sans perdre le contrôle des données, de la propriété intellectuelle ou de la conformité. Intégration ERP modulaire. Chatbot spécialisé PHC. Des modèles fondation intégrés aux systèmes déjà utilisés par l'entreprise.",
+          "Un cadre d'ingénierie fondé sur le risque qui permet aux entreprises d'adopter des <em>foundation models</em> sans perdre le contrôle des données, de la propriété intellectuelle ou de la conformité. Intégration ERP modulaire. Chatbot spécialisé Cegid PHC. Des modèles fondation intégrés aux systèmes déjà utilisés par l'entreprise.",
         chips: ["IA Générative", "Adaptation LFM", "Intégration ERP", "RGPD · AI Act"],
       },
       {
@@ -361,12 +361,12 @@ window.FTP_TRANSLATIONS.fr = {
         id: "sol-erp",
         ariaLabel: "Assistant Virtuel ERP — démo en direct",
         title: "Assistant Virtuel ERP",
-        tag: "PHC · Sage · Primavera",
+        tag: "Cegid PHC · Sage · Cegid Primavera",
         lead:
           "Une interface conversationnelle intelligente qui simplifie la manière dont les entreprises interagissent avec leurs systèmes de gestion — factures, rapports, prévisions et réponses, sans menus.",
         intro: [
           "Notre Assistant Virtuel ERP transforme l'ERP d'un <em>outil guidé par menus</em> en un <em>partenaire conversationnel</em>. Au lieu de naviguer entre formulaires et rapports, l'utilisateur pose une question et le système répond à partir de ses propres données.",
-          "L'assistant se connecte directement à PHC, Sage, Primavera et à d'autres ERP, en combinant <em>compréhension du langage naturel</em> et logique métier spécifique pour garantir des réponses contextuelles et opérationnellement justes.",
+          "L'assistant se connecte directement à Cegid PHC, Sage, Cegid Primavera et à d'autres ERP, en combinant <em>compréhension du langage naturel</em> et logique métier spécifique pour garantir des réponses contextuelles et opérationnellement justes.",
         ],
         blocks: [
           {
@@ -399,7 +399,7 @@ window.FTP_TRANSLATIONS.fr = {
                   "Génération automatique de documents",
                   "Prévision IA entraînée sur l'historique du client",
                   "Agrégation de données entre modules et systèmes",
-                  "Connecteurs API ERP personnalisés — PHC, Sage, Primavera et plus",
+                  "Connecteurs API ERP personnalisés — Cegid PHC, Sage, Cegid Primavera et plus",
                 ],
               },
             ],
@@ -584,7 +584,7 @@ window.FTP_TRANSLATIONS.fr = {
           { title: "Bots d'automatisation & notifications", text: "Des agents intelligents qui surveillent les données et agissent." },
           { title: "Portails clients & web apps", text: "Des expériences à votre marque pour vos clients." },
           { title: "Applications mobiles", text: "Des apps iOS et Android connectées à votre stack." },
-          { title: "Intégrations ERP", text: "PHC et d'autres systèmes reliés à votre écosystème numérique." },
+          { title: "Intégrations ERP", text: "Cegid PHC et d'autres systèmes reliés à votre écosystème numérique." },
           { title: "Workflows pilotés par la donnée", text: "Des pipelines qui transforment la donnée en action." },
         ],
       },
@@ -702,11 +702,11 @@ window.FTP_TRANSLATIONS.fr = {
         problemHtml:
           "Les entreprises veulent exploiter le potentiel transformateur de l'IA générative et des LFMs comme GPT, Bard ou Falcon, mais se heurtent à des coûts élevés, à une forte allocation de ressources et à des exigences strictes de conformité. Sécurité, propriété intellectuelle, biais, transparence et alignement avec le RGPD et l'AI Act compliquent une adoption fiable — et les ERP monolithiques freinent l'intégration de l'IA.",
         solutionHtml:
-          "Un cadre d'ingénierie fondé sur le risque pour une adoption rapide, informée et fiable des LFMs en environnement d'entreprise. Méthodes, outils, benchmarks sectoriels, infrastructures open-source et évaluation alignée avec le RGPD et l'AI Act. Cas national : une plateforme modulaire d'intégration, du monolithe vers les microservices, avec un chatbot spécialisé PHC.",
+          "Un cadre d'ingénierie fondé sur le risque pour une adoption rapide, informée et fiable des LFMs en environnement d'entreprise. Méthodes, outils, benchmarks sectoriels, infrastructures open-source et évaluation alignée avec le RGPD et l'AI Act. Cas national : une plateforme modulaire d'intégration, du monolithe vers les microservices, avec un chatbot spécialisé Cegid PHC.",
         chips: [
           "IA Générative",
           "Adaptation LFM",
-          "Intégration ERP (PHC)",
+          "Intégration ERP (Cegid PHC)",
           "Monolithe Modulaire → Microservices",
           "IA Open-source",
           "RGPD · AI Act",
@@ -899,7 +899,7 @@ window.FTP_TRANSLATIONS.fr = {
       "Innover à l'intersection de<br/><em>la gestion d'entreprise</em> &amp; <em>l'intelligence artificielle</em>.",
     whoTitle: "Qui Nous Sommes",
     whoHtml:
-      "FTP est une entreprise technologique portugaise basée à Porto, avec une équipe pluridisciplinaire d'environ 30 spécialistes. Fondée en 1999 pour implémenter et supporter le logiciel de gestion PHC, elle a évolué vers un fournisseur technologique global. Notre portefeuille couvre aujourd'hui <strong>l'intelligence artificielle</strong>, <strong>le développement logiciel sur mesure</strong>, <strong>la cybersécurité</strong> et <strong>l'administration d'infrastructures</strong>.",
+      "FTP est une entreprise technologique portugaise basée à Porto, avec une équipe pluridisciplinaire d'environ 30 spécialistes. Fondée en 1999 pour implémenter et supporter le logiciel de gestion Cegid PHC, elle a évolué vers un fournisseur technologique global. Notre portefeuille couvre aujourd'hui <strong>l'intelligence artificielle</strong>, <strong>le développement logiciel sur mesure</strong>, <strong>la cybersécurité</strong> et <strong>l'administration d'infrastructures</strong>.",
     missionTitle: "Notre Mission",
     missionHtml:
       "Transformer la recherche scientifique et académique en <em>solutions d'entreprise</em> appliquées et à fort impact.",

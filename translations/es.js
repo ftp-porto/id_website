@@ -115,7 +115,7 @@ window.FTP_TRANSLATIONS.es = {
         title: "ELFMO",
         sub: "Enterprise Large Foundation Models",
         bodyHtml:
-          "Un marco de ingeniería basado en riesgo que permite a las empresas adoptar <em>foundation models</em> sin perder el control de datos, propiedad intelectual o cumplimiento. Integración modular con ERP. Chatbot especializado en PHC. Modelos fundacionales viviendo dentro de los sistemas que el negocio ya utiliza.",
+          "Un marco de ingeniería basado en riesgo que permite a las empresas adoptar <em>foundation models</em> sin perder el control de datos, propiedad intelectual o cumplimiento. Integración modular con ERP. Chatbot especializado en Cegid PHC. Modelos fundacionales viviendo dentro de los sistemas que el negocio ya utiliza.",
         chips: ["IA Generativa", "Adaptación LFM", "Integración ERP", "RGPD · AI Act"],
       },
       {
@@ -361,12 +361,12 @@ window.FTP_TRANSLATIONS.es = {
         id: "sol-erp",
         ariaLabel: "Asistente Virtual ERP — demo en vivo",
         title: "Asistente Virtual ERP",
-        tag: "PHC · Sage · Primavera",
+        tag: "Cegid PHC · Sage · Cegid Primavera",
         lead:
           "Una interfaz conversacional inteligente que simplifica cómo las empresas interactúan con sus sistemas de gestión — facturas, informes, previsiones y respuestas, sin menús.",
         intro: [
           "Nuestro Asistente Virtual ERP convierte el ERP de una <em>herramienta guiada por menús</em> en un <em>socio conversacional</em>. En lugar de navegar por formularios e informes, el usuario pregunta y el sistema responde con base en sus propios datos.",
-          "El asistente se conecta directamente a PHC, Sage, Primavera y otros ERPs, combinando <em>comprensión del lenguaje natural</em> con lógica de negocio específica para asegurar respuestas contextuales y operativamente correctas.",
+          "El asistente se conecta directamente a Cegid PHC, Sage, Cegid Primavera y otros ERPs, combinando <em>comprensión del lenguaje natural</em> con lógica de negocio específica para asegurar respuestas contextuales y operativamente correctas.",
         ],
         blocks: [
           {
@@ -399,7 +399,7 @@ window.FTP_TRANSLATIONS.es = {
                   "Generación automática de documentos",
                   "Predicción con IA entrenada sobre el histórico del cliente",
                   "Agregación de datos entre módulos y sistemas",
-                  "Conectores API ERP personalizados — PHC, Sage, Primavera y más",
+                  "Conectores API ERP personalizados — Cegid PHC, Sage, Cegid Primavera y más",
                 ],
               },
             ],
@@ -584,7 +584,7 @@ window.FTP_TRANSLATIONS.es = {
           { title: "Bots de automatización & notificaciones", text: "Agentes inteligentes que monitorizan datos y actúan." },
           { title: "Portales de cliente & web apps", text: "Experiencias con tu marca para tus clientes." },
           { title: "Aplicaciones móviles", text: "Apps iOS y Android conectadas a tu stack." },
-          { title: "Integraciones ERP", text: "PHC y otros sistemas conectados a tu ecosistema digital." },
+          { title: "Integraciones ERP", text: "Cegid PHC y otros sistemas conectados a tu ecosistema digital." },
           { title: "Workflows guiados por datos", text: "Pipelines que convierten datos en acción." },
         ],
       },
@@ -702,11 +702,11 @@ window.FTP_TRANSLATIONS.es = {
         problemHtml:
           "Las empresas quieren el potencial transformador de la IA Generativa y los LFMs como GPT, Bard y Falcon, pero se enfrentan a costes altos, asignación intensa de recursos y exigencias de cumplimiento. Seguridad, propiedad intelectual, sesgo, transparencia y alineación con RGPD y AI Act dificultan una adopción fiable — y los ERPs monolíticos frenan la integración de IA.",
         solutionHtml:
-          "Un framework de ingeniería basado en riesgo para una adopción rápida, informada y fiable de LFMs en entornos empresariales. Métodos, herramientas, benchmarks sectoriales, infraestructuras open-source y evaluación alineada con RGPD y AI Act. Caso nacional: una plataforma modular de integración, del monolito a microservicios, con chatbot especializado en PHC.",
+          "Un framework de ingeniería basado en riesgo para una adopción rápida, informada y fiable de LFMs en entornos empresariales. Métodos, herramientas, benchmarks sectoriales, infraestructuras open-source y evaluación alineada con RGPD y AI Act. Caso nacional: una plataforma modular de integración, del monolito a microservicios, con chatbot especializado en Cegid PHC.",
         chips: [
           "IA Generativa",
           "Adaptación LFM",
-          "Integración ERP (PHC)",
+          "Integración ERP (Cegid PHC)",
           "Monolito Modular → Microservicios",
           "IA Open-source",
           "RGPD · AI Act",
@@ -899,7 +899,7 @@ window.FTP_TRANSLATIONS.es = {
       "Innovando en la intersección entre<br/><em>Gestión Empresarial</em> &amp; <em>Inteligencia Artificial</em>.",
     whoTitle: "Quiénes Somos",
     whoHtml:
-      "FTP es una empresa tecnológica portuguesa con sede en Oporto, con un equipo multidisciplinar de unos 30 especialistas. Fundada en 1999 para implantar y dar soporte al software de gestión PHC, evolucionó hasta convertirse en un proveedor tecnológico global. Nuestro portafolio incluye hoy <strong>Inteligencia Artificial</strong>, <strong>Desarrollo de Software a Medida</strong>, <strong>Ciberseguridad</strong> y <strong>Administración de Infraestructuras</strong>.",
+      "FTP es una empresa tecnológica portuguesa con sede en Oporto, con un equipo multidisciplinar de unos 30 especialistas. Fundada en 1999 para implantar y dar soporte al software de gestión Cegid PHC, evolucionó hasta convertirse en un proveedor tecnológico global. Nuestro portafolio incluye hoy <strong>Inteligencia Artificial</strong>, <strong>Desarrollo de Software a Medida</strong>, <strong>Ciberseguridad</strong> y <strong>Administración de Infraestructuras</strong>.",
     missionTitle: "Nuestra Misión",
     missionHtml:
       "Transformar la investigación científica y académica en <em>soluciones empresariales</em> aplicadas y de alto impacto.",
