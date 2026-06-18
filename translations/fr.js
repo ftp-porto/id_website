@@ -814,6 +814,8 @@ window.FTP_TRANSLATIONS.fr = {
         role: "Développeur R&D",
         name: "Tiago",
         spec: "Support Technique & Développement",
+        quote:
+          "Chaque nombre raconte une histoire. La Business Intelligence en révèle le sens.",
       },
     ],
   },

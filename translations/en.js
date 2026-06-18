@@ -898,6 +898,8 @@ window.FTP_TRANSLATIONS.en = {
         role: "R&D Developer",
         name: "Tiago",
         spec: "Technical Support & Development",
+        quote:
+          "Every number tells a story. Business Intelligence reveals its meaning.",
       },
     ],
   },

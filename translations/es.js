@@ -814,6 +814,8 @@ window.FTP_TRANSLATIONS.es = {
         role: "Developer de I+D",
         name: "Tiago",
         spec: "Soporte Técnico & Desarrollo",
+        quote:
+          "Cada número cuenta una historia. Business Intelligence revela su significado.",
       },
     ],
   },

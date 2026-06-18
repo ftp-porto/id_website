@@ -1206,6 +1206,7 @@ PT: *Onde a confiança digital começa. A crescer juntos.*
 | `teamTeixeiraRole` | R&D Developer | R&D Developer |
 | `teamTeixeiraSpec` | AI & ELFMO Project | IA & Projeto ELFMO |
 | `teamTiago` | Tiago | Tiago |
+| `teamTiagoQuote` | Every number tells a story. Business Intelligence reveals its meaning. | Cada número conta uma história. A Business Intelligence revela o seu significado. |
 | `teamTiagoRole` | R&D Developer | R&D Developer |
 | `teamTiagoSpec` | Technical Support & Development | Suporte Técnico & Desenvolvimento |
 | `technologies` | Technologies | Tecnologias |

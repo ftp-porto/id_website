@@ -94,7 +94,11 @@
       poster: 'Alters_Img/mariana.png',
       video: 'Alters_Img/mariana_video.mp4',
     },
-    tiago: {},
+    tiago: {
+      image: 'Alters_Img/tiago.jpg',
+      poster: 'Alters_Img/tiago.jpg',
+      video: 'Alters_Img/tiago_video.mp4',
+    },
   };
   const BLOG_POST_MEDIA = {
     'ears-ankara-review': [
