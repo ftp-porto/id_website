@@ -48,11 +48,10 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* journey runtime variables, set by JS */
-  --p:    0;     /* 0..1 overall journey progress */
-  --zoom: 1;     /* 1..1.7 video scale */
-  --veil: 0;     /* 0..0.85 video darkening */
-  --shake: 0;    /* parallax fine motion */
+  /* journey runtime variables — written by JS on .journey__stage only */
+  --p:      0;   /* 0..1 eased journey progress */
+  --portal: 0;   /* 0..1..0 intensity of the cortex crossing */
+  --mask:   0;   /* 0..1 floor fade hiding ghosted UI in early frames */
 }
 
 /* ============================================================
@@ -324,7 +323,7 @@ button { font: inherit; }
    ============================================================ */
 .journey {
   position: relative;
-  height: 700vh;             /* 7 viewport heights of scroll */
+  height: 820vh;             /* ~8 viewport heights; the crossing gets its own stretch */
   width: 100%;
 }
 .journey__floor { height: 1px; }
@@ -375,13 +374,50 @@ button { font: inherit; }
   height: 100%;
   display: block;
   pointer-events: none;
-  /* Sub-pixel parallax shake only — no zoom, so the image stays sharp. */
-  transform: translate3d(
-    calc(var(--shake) * 4px), calc(var(--shake) * -3px), 0);
-  filter: brightness(calc(1 - var(--p) * 0.12));
-  will-change: transform;
-  transition: filter 0.6s linear;
-  image-rendering: auto;
+  /* Camera (push-in, parallax, crossing shake) is drawn inside the
+     canvas by JS, so nothing here re-rasterises the frame. */
+  opacity: 0;
+  transition: opacity 0.9s var(--ease-out);
+}
+.stage__canvas.is-ready { opacity: 1; }
+
+/* Synapse field — additive streaks over the brain. Its speed follows the
+   scroll velocity; at the crossing it becomes warp. */
+.stage__fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Crossing flash — a bloom from the centre as the camera breaks the
+   cortex surface, plus a tunnel that narrows the field of view. */
+.stage__flash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(214, 240, 255, 0.95) 0%,
+      rgba(120, 200, 255, 0.55) 14%,
+      rgba(79, 134, 255, 0.18) 34%,
+      rgba(79, 134, 255, 0) 58%);
+  mix-blend-mode: screen;
+  opacity: calc(var(--portal) * var(--portal) * 0.85);
+  transform: scale(calc(0.6 + var(--portal) * 0.9));
+}
+.stage__flash::after {
+  content: "";
+  position: absolute;
+  inset: -2%;
+  background: radial-gradient(ellipse 62% 58% at 50% 50%,
+    transparent 40%, rgba(5, 8, 14, 0.92) 100%);
+  opacity: calc(var(--portal) * 1.4);
+  transform: scale(calc(1.25 - var(--portal) * 0.25));
 }
 
 /* Gentle global vignette only — keeps the brain visible everywhere,
@@ -407,10 +443,11 @@ button { font: inherit; }
   pointer-events: none;
   /* As you go deeper, vignette tightens slightly — never blocks brain */
   opacity: calc(0.85 + var(--p) * 0.15);
+  z-index: 3;
 }
 
 .stage__vignette {
-  position: absolute; inset: 0; z-index: 2;
+  position: absolute; inset: 0; z-index: 4;
   pointer-events: none;
   background: radial-gradient(circle at 50% 50%,
     transparent 30%,
@@ -418,7 +455,7 @@ button { font: inherit; }
   mix-blend-mode: multiply;
 }
 .stage__grain {
-  position: absolute; inset: 0; z-index: 3;
+  position: absolute; inset: 0; z-index: 5;
   background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 3px 3px;
   mix-blend-mode: overlay;
@@ -471,21 +508,21 @@ button { font: inherit; }
 }
 
 .brain-ctas__frame::before {
+  /* Floor fade: the early frames carry ghosted UI from the source
+     recording along the bottom edge. JS raises --mask while those
+     frames are on screen and drops it once the camera has moved past. */
   content: "";
   position: absolute;
-  left: 33.8%;
-  top: 80.6%;
-  width: 32.4%;
-  height: 12.8%;
-  border-radius: 999px;
-  background:
-    radial-gradient(ellipse at center,
-      rgba(11,13,16,0.88) 0%,
-      rgba(11,13,16,0.72) 42%,
-      rgba(11,13,16,0.28) 72%,
-      rgba(11,13,16,0.00) 100%);
-  filter: blur(14px);
-  opacity: clamp(0, calc(1 - var(--p) * 6.1), 1);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  background: linear-gradient(180deg,
+    rgba(11,13,16,0) 0%,
+    rgba(11,13,16,0.72) 38%,
+    rgba(11,13,16,0.96) 70%,
+    #0B0D10 100%);
+  opacity: var(--mask);
   pointer-events: none;
 }
 
@@ -500,7 +537,7 @@ button { font: inherit; }
   text-align: center;
   transform: translate(-50%, 0);
   z-index: 2;
-  opacity: clamp(0, calc(1 - var(--p) * 5.9), 1);
+  opacity: clamp(0, calc(1 - var(--p) * 14), 1);
   transition: opacity 0.26s ease, transform 0.5s var(--ease-out);
 }
 
@@ -519,7 +556,7 @@ button { font: inherit; }
       rgba(11,13,16,0.16) 42%,
       rgba(11,13,16,0.00) 78%);
   filter: blur(18px);
-  opacity: clamp(0, calc(1 - var(--p) * 6.3), 0.95);
+  opacity: clamp(0, calc(1 - var(--p) * 15), 0.95);
   z-index: -1;
 }
 
@@ -647,7 +684,7 @@ button { font: inherit; }
   pointer-events: auto;
   cursor: pointer;
   z-index: 1;
-  opacity: clamp(0, calc(1 - var(--p) * 5.9), 1);
+  opacity: clamp(0, calc(1 - var(--p) * 14), 1);
   transition:
     transform 0.24s var(--ease-out),
     border-color 0.24s ease,
@@ -672,7 +709,7 @@ button { font: inherit; }
   filter: blur(20px);
   pointer-events: none;
   z-index: -1;
-  opacity: clamp(0, calc(1 - var(--p) * 6.3), 1);
+  opacity: clamp(0, calc(1 - var(--p) * 15), 1);
 }
 
 .brain-cta:hover,
@@ -748,27 +785,30 @@ button { font: inherit; }
   }
 
   .brain-copy--left {
-    left: 27%;
+    left: 31%;
     top: 71.2%;
   }
 
   .brain-copy--right {
-    left: 73%;
+    left: 69%;
     top: 71.2%;
   }
 
+  /* The buttons already name both doors; the captions only collide. */
+  .brain-copy { display: none; }
   .brain-cta {
     width: 19%;
     height: 7.1%;
   }
+  .brain-cta__label { font-size: 0.6rem !important; letter-spacing: 0.16em; }
 
   .brain-cta--left {
-    left: 16.8%;
+    left: 21.5%;
     top: 80.8%;
   }
 
   .brain-cta--right {
-    left: 64.2%;
+    left: 59.5%;
     top: 80.8%;
   }
 }
@@ -850,11 +890,41 @@ button { font: inherit; }
   text-align: center;
   /* opacity — 0 outside range, 1 in middle */
   opacity: var(--op, 0);
-  /* default motion: gentle vertical drift */
-  transform: translate3d(0, calc((1 - var(--cp, 0.5)) * 50px - 25px), 0);
-  transition: opacity 0.18s linear;
-  will-change: transform, opacity;
+  /* Depth motion (focus pull in, fly past on exit) is written inline by
+     the journey loop; scroll is already eased there, so no transition. */
+  visibility: hidden;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity, filter;
 }
+.chapters { will-change: transform; }
+
+/* CROSSING — one short line that rushes at the viewer and past them. */
+.chapter--portal::before { display: none; }
+.portal-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 7vw, 6.6rem);
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 0;
+  color: #F4F6FA;
+  white-space: nowrap;
+  text-shadow:
+    0 0 24px rgba(120, 200, 255, 0.55),
+    0 0 80px rgba(79, 134, 255, 0.35),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.portal-title em {
+  font-style: italic;
+  font-weight: 400;
+  color: #A9D8FF;
+}
+
+/* HUD reacts to the crossing: the status dot races, the label lights. */
+.journey__stage.is-crossing .hud-dot { animation-duration: 0.32s; background: #A9D8FF; }
+.journey__stage.is-crossing [data-stage-label] { color: #DDF1FF; text-shadow: 0 0 12px rgba(120, 200, 255, 0.8); }
+.journey__stage.is-crossing .frame__mark { border-color: rgba(169, 216, 255, 0.55); }
+.frame__mark { transition: border-color 0.4s ease; }
 .chapter > * {
   max-width: min(1100px, 92vw);
   /* Strong soft halo on EVERY chapter element so text reads cleanly on
@@ -1768,10 +1838,16 @@ button { font: inherit; }
     min-height: 100dvh;
     opacity: 1 !important;
     transform: none !important;
+    visibility: visible !important;
+    filter: none !important;
     padding: clamp(7rem, 16vh, 9rem) clamp(1.25rem, 5vw, 2rem);
   }
   .chapindex { display: none; }
-  .stage__hud { position: fixed; }
+  /* The HUD collides with the brand + language pills on a phone. */
+  .stage__hud { display: none; }
+  /* First screen on a phone is the brain and its two doors, as on desktop;
+     the opening headline follows one screen later. */
+  .chapter--awakening { margin-top: 100dvh; }
   .frame { position: fixed; }
   /* scroll-cued reveals on mobile */
   .chapter[data-from] { transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
@@ -1780,6 +1856,8 @@ button { font: inherit; }
   /* Quotes: just stack first 2 visible */
   .quotes { position: relative; min-height: 0; display: flex; flex-direction: column; gap: 2rem; }
   .quote { position: relative; opacity: 1 !important; transform: none !important; }
+  .chapter--portal { min-height: 60dvh; }
+  .portal-title { white-space: normal; }
 }
 
 /* ============================================================
@@ -4154,7 +4232,9 @@ main,
 .foot {
   transition: transform 1.05s var(--ease-out), opacity 0.72s ease, filter 0.78s ease;
   transform-origin: center center;
-  will-change: transform, opacity, filter;
+  /* No permanent will-change here: on <main> it would turn the whole page
+     into one GPU layer and break position:fixed inside the journey
+     (the mobile brain backdrop stretched to the full page height). */
 }
 body.is-blog-open .scroll-progress,
 body.is-blog-open .brand,
@@ -4922,7 +5002,6 @@ body.is-blog-open .foot {
     opacity 0.85s var(--ease-out),
     transform 0.85s var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
 }
 .reveal.is-in {
   opacity: 1;
@@ -4975,26 +5054,45 @@ body.is-blog-open .foot {
   .tilt-card::after { display: none; }
 }
 
-/* Section title — accent highlight bar that wipes across the
-   italic em when the section becomes the active viewport.        */
+/* Section title — the italic accent word "fires" once, like a synapse,
+   the first time its section is in view. One shot, no loop. */
+.sec__title em {
+  transition: color 0.5s ease;
+}
 .sec.is-active .sec__title em {
-  background: linear-gradient(90deg,
-    var(--accent-soft) 0%,
-    var(--accent) 50%,
-    var(--accent-soft) 100%);
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: sec-title-shimmer 4.2s var(--ease-in-out) infinite;
+  animation: synapse-fire 1.4s var(--ease-out) 0.35s both;
 }
-@keyframes sec-title-shimmer {
-  0%   { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+@keyframes synapse-fire {
+  0%   { text-shadow: 0 0 0 transparent; }
+  22%  { text-shadow: 0 0 18px var(--accent-glow), 0 0 42px var(--accent-glow); }
+  100% { text-shadow: 0 0 0 transparent; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .sec.is-active .sec__title em { animation: none; }
+
+/* Section titles open from behind their own baseline instead of the
+   generic fade-up the cards use, so headings and content read as two
+   different beats. */
+@media (prefers-reduced-motion: no-preference) {
+  .sec__head.reveal { opacity: 1; transform: none; }
+  .sec__head.reveal .sec__title {
+    clip-path: inset(0 0 100% 0);
+    transform: translate3d(0, 0.35em, 0);
+    transition:
+      clip-path 0.9s var(--ease-out),
+      transform 0.9s var(--ease-out);
+  }
+  .sec__head.reveal .sec__lede,
+  .sec__head.reveal .chap-num {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+  }
+  .sec__head.reveal .sec__lede { transition-delay: 0.18s; }
+  .sec__head.reveal.is-in .sec__title {
+    clip-path: inset(-0.2em -0.2em -0.25em -0.2em);
+    transform: none;
+  }
+  .sec__head.reveal.is-in .sec__lede,
+  .sec__head.reveal.is-in .chap-num { opacity: 1; transform: none; }
 }
 
 /* Text links should read unmistakably as hyperlinks on hover/focus,

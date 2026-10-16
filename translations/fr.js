@@ -185,6 +185,10 @@ window.FTP_TRANSLATIONS.fr = {
         },
       ],
     },
+    portal: {
+      label: "SYNAPSE · TRAVERSÉE",
+      titleHtml: 'Au cœur de l’<em>esprit</em>.',
+    },
     invite: {
       chapter: "/ Chapitre Final · Invitation",
       titleHtml:

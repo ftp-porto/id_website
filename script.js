@@ -425,13 +425,17 @@
 
   const STAGE_RANGES = [
     [0.00, 0.06],
-    [0.06, 0.20],
-    [0.20, 0.36],
-    [0.36, 0.48],
-    [0.48, 0.68],
-    [0.68, 0.90],
+    [0.06, 0.17],
+    [0.17, 0.31],
+    [0.31, 0.43],
+    [0.43, 0.57],
+    [0.57, 0.71],
+    [0.71, 0.90],
     [0.90, 1.01],
   ];
+  /* Index of the "crossing" stage inside STAGE_RANGES — its label comes
+     from t.journey.portal.label rather than the legacy 12-label list. */
+  const PORTAL_STAGE_INDEX = 4;
   let currentTranslationData = null;
   let activeBlogPostSlug = null;
   let blogCloseTimer = 0;
@@ -768,9 +772,11 @@
     return translations.en ? 'en' : Object.keys(translations)[0];
   }
 
-  function normalizeStageLabels(labels) {
+  function normalizeStageLabels(labels, portalLabel) {
     if (Array.isArray(labels) && labels.length === STAGE_RANGES.length) return labels;
-    return JOURNEY_STAGE_LABEL_INDICES.map((index) => labels[index] || DEFAULT_STAGE_LABELS[index]);
+    const picked = JOURNEY_STAGE_LABEL_INDICES.map((index) => labels[index] || DEFAULT_STAGE_LABELS[index]);
+    picked.splice(PORTAL_STAGE_INDEX, 0, portalLabel || 'SYNAPSE · CROSSING');
+    return picked;
   }
 
   function stripJourneyProjectNames(value) {
@@ -829,13 +835,13 @@
     }).join('');
 
     return [
-      '<article id="awakening-cue" class="chapter chapter--awakening" data-from="0.00" data-to="0.20">',
+      '<article id="awakening-cue" class="chapter chapter--awakening" data-from="0.04" data-to="0.17">',
       `  <p class="kicker">${t.journey.awakening.kicker.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</p>`,
       `  <h1 class="display">${t.journey.awakening.titleHtml}</h1>`,
       `  <p class="awakening__lede">${t.journey.awakening.ledeHtml}</p>`,
       '</article>',
 
-      '<article id="manifesto-cue" class="chapter chapter--manifesto" data-from="0.20" data-to="0.36">',
+      '<article id="manifesto-cue" class="chapter chapter--manifesto" data-from="0.17" data-to="0.31">',
       `  <span class="chap-num">${escapeHtml(t.journey.manifesto.chapter)}</span>`,
       '  <div class="manifesto-text" data-words>',
       `    <p>${t.journey.manifesto.bodyHtml}</p>`,
@@ -843,7 +849,7 @@
       `  <span class="chap-sig">${escapeHtml(t.journey.manifesto.signature)}</span>`,
       '</article>',
 
-      '<article class="chapter chapter--lab" data-from="0.36" data-to="0.48">',
+      '<article class="chapter chapter--lab" data-from="0.31" data-to="0.43">',
       `  <span class="chap-num">${escapeHtml(t.journey.lab.chapter)}</span>`,
       `  <h2 class="lab-title">${t.journey.lab.titleHtml}</h2>`,
       '  <div class="lab-stats">',
@@ -857,7 +863,11 @@
       '  </div>',
       '</article>',
 
-      '<article class="chapter chapter--atlas" data-from="0.48" data-to="0.68">',
+      '<article class="chapter chapter--portal" data-from="0.43" data-to="0.57" data-depth="fly">',
+      `  <h2 class="portal-title">${(t.journey.portal && t.journey.portal.titleHtml) || 'Inside the <em>mind</em>.'}</h2>`,
+      '</article>',
+
+      '<article class="chapter chapter--atlas" data-from="0.57" data-to="0.71">',
       `  <span class="chap-num">${escapeHtml(t.journey.atlas.chapter)}</span>`,
       `  <h2 class="atlas__title">${t.journey.atlas.titleHtml}</h2>`,
       '  <div class="atlas">',
@@ -884,7 +894,7 @@
       '  </div>',
       '</article>',
 
-      '<article id="minds-cue" class="chapter chapter--minds" data-from="0.68" data-to="0.90">',
+      '<article id="minds-cue" class="chapter chapter--minds" data-from="0.71" data-to="0.90">',
       `  <span class="chap-num">${escapeHtml(t.journey.minds.chapter)}</span>`,
       `  <h2 class="minds-title">${t.journey.minds.titleHtml}</h2>`,
       `  <div class="quotes" data-quotes>${quoteMarkup}</div>`,
@@ -2045,7 +2055,8 @@
 
   const localeState = initI18n();
   const STAGE_LABELS = normalizeStageLabels(
-    (localeState.data && localeState.data.hud && localeState.data.hud.stageLabels) || DEFAULT_STAGE_LABELS
+    (localeState.data && localeState.data.hud && localeState.data.hud.stageLabels) || DEFAULT_STAGE_LABELS,
+    localeState.data && localeState.data.journey && localeState.data.journey.portal && localeState.data.journey.portal.label
   );
 
   /* ---------- 1. THEME TOGGLE — light / dark, persisted ---------- */
@@ -2074,70 +2085,102 @@
     }
   }
 
-  /* ---------- 2. BRAIN FRAME SEQUENCE — scroll-scrubbed canvas ---------- */
+  /* ---------- 2. BRAIN FRAME SEQUENCE — scroll-scrubbed canvas ----------
+     The clip flies toward the brain (0 → 104), tears through the cortex
+     (104 → 176) and drifts inside the network (176 → 249). Scroll maps
+     onto it piecewise so the crossing gets its own stretch of scroll and
+     reads as a dive rather than a cut. Adjacent frames are cross-faded,
+     so a smoothed, fractional index plays like video instead of stepping. */
   const FRAMES_PATH = 'frames';
   const FRAME_EXT = 'jpg';
   const FRAME_COUNT = 250;
-  const FRAME_WIDTH = 1280;
-  const FRAME_HEIGHT = 720;
-  const FRAME_ASPECT = FRAME_WIDTH / FRAME_HEIGHT;
+  const FRAME_ASPECT = 16 / 9;
   const START_FRAME = 0;
   const FIRST_FRAME_OVERRIDE = null;
+  const PORTAL_FROM = 0.43;
+  const PORTAL_TO = 0.57;
+  const FRAME_MAP = [
+    [0, 0],
+    [PORTAL_FROM, 104],
+    [PORTAL_TO, 176],
+    [1, FRAME_COUNT - 1],
+  ];
+  /* Frames ~1–68 carry ghosted UI from the source recording along the
+     bottom edge; a floor fade (--mask) hides it until the camera is past. */
+  const GHOST_FADE_IN = [0, 6];
+  const GHOST_FADE_OUT = [60, 70];
+  /* Small overscan crops the dark border baked into the frames. */
+  const OVERSCAN = 1.045;
+  const MOBILE_INSIDE_FRAME = 200;
 
   const canvas = $('[data-stage-canvas]');
   const ctx = canvas ? canvas.getContext('2d', { alpha: false }) : null;
   const brainCtasFrame = $('[data-brain-ctas-frame]');
   const frames = new Array(FRAME_COUNT);
-  let framesLoaded = 0;
+  const cam = { scale: 1, x: 0, y: 0 };
   let firstFrameDrawn = false;
-  let lastDrawnIdx = -1;
+  let lastDrawKey = '';
+  let lastFrame = START_FRAME;
+  let canvasDpr = 1;
 
   function frameSrc(i) {
     if (i === 0 && FIRST_FRAME_OVERRIDE) return FIRST_FRAME_OVERRIDE;
     return `${FRAMES_PATH}/frame-${String(i).padStart(3, '0')}.${FRAME_EXT}`;
   }
 
+  function frameForProgress(p) {
+    for (let i = 1; i < FRAME_MAP.length; i += 1) {
+      const [p0, f0] = FRAME_MAP[i - 1];
+      const [p1, f1] = FRAME_MAP[i];
+      if (p <= p1) return f0 + ((p - p0) / (p1 - p0)) * (f1 - f0);
+    }
+    return FRAME_COUNT - 1;
+  }
+
+  function ghostMaskForFrame(f) {
+    if (f <= GHOST_FADE_IN[0] || f >= GHOST_FADE_OUT[1]) return 0;
+    if (f < GHOST_FADE_IN[1]) return (f - GHOST_FADE_IN[0]) / (GHOST_FADE_IN[1] - GHOST_FADE_IN[0]);
+    if (f > GHOST_FADE_OUT[0]) return (GHOST_FADE_OUT[1] - f) / (GHOST_FADE_OUT[1] - GHOST_FADE_OUT[0]);
+    return 1;
+  }
+
+  /* Cover on landscape screens (no letterbox bars — you are IN the scene).
+     On portrait phones the frame is widened past the viewport so the brain
+     itself, not the empty space around it, fills the screen; the two CTAs
+     are re-positioned for that crop in the mobile CSS. */
+  function frameGeometry(w, h) {
+    const ratio = w / h;
+    let dw;
+    if (ratio >= 1.2) dw = Math.max(w, h * FRAME_ASPECT);
+    else if (ratio < 0.8) dw = w * 1.6;
+    else dw = Math.min(w, h * FRAME_ASPECT);
+    dw *= OVERSCAN;
+    const dh = dw / FRAME_ASPECT;
+    return { x: (w - dw) / 2, y: (h - dh) / 2, w: dw, h: dh };
+  }
+
   function fitCanvas() {
     if (!canvas) return;
-    const dpr = window.devicePixelRatio || 1;
+    canvasDpr = Math.min(window.devicePixelRatio || 1, 1.25);
     const w = canvas.clientWidth || innerWidth;
     const h = canvas.clientHeight || innerHeight;
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
+    canvas.width = Math.round(w * canvasDpr);
+    canvas.height = Math.round(h * canvasDpr);
     if (ctx) {
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
     }
     syncBrainCtasFrame();
-    if (lastDrawnIdx >= 0) drawFrame(lastDrawnIdx, true);
+    drawFrame(lastFrame, true);
   }
 
   function syncBrainCtasFrame() {
     if (!brainCtasFrame || !canvas) return;
-
-    const w = canvas.clientWidth || innerWidth;
-    const h = canvas.clientHeight || innerHeight;
-    let drawW;
-    let drawH;
-    let offsetX;
-    let offsetY;
-
-    if (w / h > FRAME_ASPECT) {
-      drawH = h;
-      drawW = h * FRAME_ASPECT;
-      offsetY = 0;
-      offsetX = (w - drawW) / 2;
-    } else {
-      drawW = w;
-      drawH = w / FRAME_ASPECT;
-      offsetX = 0;
-      offsetY = (h - drawH) / 2;
-    }
-
-    brainCtasFrame.style.left = `${offsetX}px`;
-    brainCtasFrame.style.top = `${offsetY}px`;
-    brainCtasFrame.style.width = `${drawW}px`;
-    brainCtasFrame.style.height = `${drawH}px`;
+    const g = frameGeometry(canvas.clientWidth || innerWidth, canvas.clientHeight || innerHeight);
+    brainCtasFrame.style.left = `${g.x}px`;
+    brainCtasFrame.style.top = `${g.y}px`;
+    brainCtasFrame.style.width = `${g.w}px`;
+    brainCtasFrame.style.height = `${g.h}px`;
   }
 
   let slowScrollFrame = 0;
@@ -2198,52 +2241,70 @@
   window.addEventListener('wheel', cancelSlowScroll, { passive: true });
   window.addEventListener('touchstart', cancelSlowScroll, { passive: true });
 
-  function drawFrame(idx, force = false) {
-    if (!ctx || !canvas) return;
-    if (idx === lastDrawnIdx && !force) return;
+  function loadedFrame(i) {
+    const img = frames[i];
+    return img && img.complete && img.naturalWidth ? img : null;
+  }
 
-    const img = frames[idx];
-    if (!img || !img.complete || !img.naturalWidth) {
-      let near = -1;
-      let dist = Infinity;
-      for (let i = 0; i < FRAME_COUNT; i += 1) {
-        if (frames[i] && frames[i].complete && frames[i].naturalWidth) {
-          const delta = Math.abs(i - idx);
-          if (delta < dist) {
-            dist = delta;
-            near = i;
-          }
-        }
-      }
-      if (near < 0) return;
-      drawFrame(near, force);
-      return;
+  function nearestLoadedFrame(i) {
+    for (let d = 0; d < FRAME_COUNT; d += 1) {
+      const a = loadedFrame(i - d);
+      if (a) return a;
+      const b = loadedFrame(i + d);
+      if (b) return b;
     }
+    return null;
+  }
+
+  function drawFrame(f, force = false) {
+    if (!ctx || !canvas) return;
+    const idx = clamp(f, 0, FRAME_COUNT - 1);
+    const key = `${idx.toFixed(2)}|${cam.scale.toFixed(4)}|${cam.x.toFixed(1)}|${cam.y.toFixed(1)}`;
+    if (!force && key === lastDrawKey) return;
+
+    const i0 = Math.floor(idx);
+    const t = idx - i0;
+    const a = loadedFrame(i0) || nearestLoadedFrame(i0);
+    if (!a) return;
+    const b = t > 0.02 ? loadedFrame(Math.min(FRAME_COUNT - 1, i0 + 1)) : null;
 
     const cw = canvas.width;
     const ch = canvas.height;
-    const ar = img.naturalWidth / img.naturalHeight;
-    let dw;
-    let dh;
-    let dx;
-    let dy;
+    const g = frameGeometry(cw / canvasDpr, ch / canvasDpr);
 
-    if (cw / ch > ar) {
-      dh = ch;
-      dw = ch * ar;
-      dy = 0;
-      dx = (cw - dw) / 2;
-    } else {
-      dw = cw;
-      dh = cw / ar;
-      dx = 0;
-      dy = (ch - dh) / 2;
-    }
-
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1;
     ctx.fillStyle = '#0B0D10';
     ctx.fillRect(0, 0, cw, ch);
-    ctx.drawImage(img, dx, dy, dw, dh);
-    lastDrawnIdx = idx;
+    /* Camera: scale about the viewport centre, then parallax offset. */
+    ctx.setTransform(
+      cam.scale * canvasDpr, 0, 0, cam.scale * canvasDpr,
+      (cw / 2) * (1 - cam.scale) + cam.x * canvasDpr,
+      (ch / 2) * (1 - cam.scale) + cam.y * canvasDpr
+    );
+    ctx.drawImage(a, g.x, g.y, g.w, g.h);
+    if (b) {
+      ctx.globalAlpha = t;
+      ctx.drawImage(b, g.x, g.y, g.w, g.h);
+      ctx.globalAlpha = 1;
+    }
+    /* When the frame does not fill the height (portrait), feather its
+       top and bottom edges into the night so it never reads as a band. */
+    if (g.y > 1) {
+      const fade = g.h * 0.22;
+      const top = ctx.createLinearGradient(0, g.y, 0, g.y + fade);
+      top.addColorStop(0, '#0B0D10');
+      top.addColorStop(1, 'rgba(11,13,16,0)');
+      ctx.fillStyle = top;
+      ctx.fillRect(g.x, g.y - 1, g.w, fade + 1);
+      const bottom = ctx.createLinearGradient(0, g.y + g.h - fade, 0, g.y + g.h);
+      bottom.addColorStop(0, 'rgba(11,13,16,0)');
+      bottom.addColorStop(1, '#0B0D10');
+      ctx.fillStyle = bottom;
+      ctx.fillRect(g.x, g.y + g.h - fade, g.w, fade + 1);
+    }
+    lastDrawKey = key;
+    lastFrame = idx;
 
     if (!firstFrameDrawn) {
       firstFrameDrawn = true;
@@ -2256,9 +2317,8 @@
       const img = new Image();
       img.decoding = 'async';
       img.onload = () => {
-        framesLoaded += 1;
-        if (i === START_FRAME) drawFrame(START_FRAME, true);
-        else if (lastDrawnIdx === i) drawFrame(i, true);
+        /* Redraw if this frame is (or neighbours) what should be on screen. */
+        if (i === START_FRAME || Math.abs(i - lastFrame) <= 1 || !firstFrameDrawn) drawFrame(lastFrame, true);
         resolve(img);
       };
       img.onerror = () => {
@@ -2267,7 +2327,6 @@
           img.src = `${FRAMES_PATH}/frame-000.${FRAME_EXT}`;
           return;
         }
-        framesLoaded += 1;
         resolve(img);
       };
       img.src = frameSrc(i);
@@ -2280,21 +2339,24 @@
     addEventListener('resize', fitCanvas);
 
     if (mobile) {
+      /* Phones skip the 250-frame scrub (data + memory); they get the
+         outside view and one inside view, swapped at the crossing. */
       loadFrame(START_FRAME).then(() => drawFrame(START_FRAME, true));
+      loadFrame(MOBILE_INSIDE_FRAME);
     } else {
-      const waves = [
-        [START_FRAME],
-        [Math.floor((START_FRAME + FRAME_COUNT) / 2)],
-        [FRAME_COUNT - 1],
-      ];
-      for (let i = START_FRAME + 10; i < FRAME_COUNT; i += 10) waves.push([i]);
+      /* Coarse skeleton first (every 10th frame + the crossing every 4th),
+         so any scroll position has a nearby frame almost immediately. */
+      const skeleton = new Set([FRAME_COUNT - 1]);
+      for (let i = START_FRAME + 10; i < FRAME_COUNT; i += 10) skeleton.add(i);
+      for (let i = 104; i <= 176; i += 4) skeleton.add(i);
+      skeleton.delete(START_FRAME);
 
-      const skeleton = new Set(waves.flat());
+      const waves = [[START_FRAME], [...skeleton].sort((x, y) => x - y)];
       const rest = [];
-      for (let i = START_FRAME; i < FRAME_COUNT; i += 1) {
+      for (let i = START_FRAME + 1; i < FRAME_COUNT; i += 1) {
         if (!skeleton.has(i)) rest.push(i);
       }
-      waves.push(rest);
+      for (let i = 0; i < rest.length; i += 24) waves.push(rest.slice(i, i + 24));
 
       (async () => {
         for (const wave of waves) {
@@ -2380,11 +2442,24 @@
     });
   });
 
-  /* ---------- 9. THE JOURNEY — main scrollytelling driver ---------- */
+  /* ---------- 9. THE JOURNEY — main scrollytelling driver ----------
+     One rAF loop owns the whole stage while it is on screen:
+       · scroll progress is eased (inertia), so frames glide instead of step
+       · the camera pushes in, punches through at the crossing, and leans
+         with the pointer for depth
+       · a synapse field streams toward the viewer; its speed follows the
+         scroll velocity and turns into warp streaks at the crossing
+       · chapters arrive out of focus from depth and leave past the camera
+     Runtime values are written to the stage element only (never :root),
+     so the rest of the page is not restyled on every frame. */
   const journey = $('[data-journey]');
   const stage = $('[data-stage]');
   const chapters = $$('.chapter');
+  const chaptersWrap = $('[data-chapters]');
   const stageLabel = $('[data-stage-label]');
+  const fxCanvas = $('[data-stage-fx]');
+  const fx = fxCanvas ? fxCanvas.getContext('2d') : null;
+  const cinematic = !reduced && !mobile;
 
   const manifesto = $('[data-words]');
   if (manifesto) {
@@ -2410,15 +2485,28 @@
     });
   }
   const manifestoWords = manifesto ? $$('.word', manifesto) : [];
+  const manifestoChapter = manifesto ? manifesto.closest('.chapter') : null;
 
   const quoteEls = $$('[data-quote]');
+  const mindsChapter = chapters.find(c => c.classList.contains('chapter--minds'));
   let activeQuote = -1;
 
   const counters = $$('[data-counter]');
   const counterFired = new Set();
-  let timeAccum = 0;
+
+  const chapterData = chapters.map((el) => ({
+    el,
+    from: parseFloat(el.dataset.from),
+    to: parseFloat(el.dataset.to),
+    fly: el.dataset.depth === 'fly',
+    lab: el.classList.contains('chapter--lab'),
+    shown: null,
+  }));
 
   function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+  function easeInCubic(t) { return t * t * t; }
+  function smoothstep(a, b, v) { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); }
 
   function fireCounter(el) {
     if (counterFired.has(el)) return;
@@ -2442,58 +2530,200 @@
     requestAnimationFrame(tick);
   }
 
-  function update() {
-    if (progressBar) {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      const r = max > 0 ? scrollY / max : 0;
-      progressBar.style.transform = `scaleX(${r})`;
-    }
+  /* Crossing intensity, 0 → 1 → 0 across the portal range. Peaks early
+     (where the clip bursts through the surface) and decays slowly. */
+  function portalAmount(p) {
+    const u = (p - PORTAL_FROM) / (PORTAL_TO - PORTAL_FROM);
+    if (u <= 0 || u >= 1) return 0;
+    return u < 0.3 ? easeInOut(u / 0.3) : Math.pow(1 - (u - 0.3) / 0.7, 2);
+  }
 
-    if (!journey || !stage || mobile) return;
-    const jRect = journey.getBoundingClientRect();
-    const jTop = scrollY + jRect.top;
-    const total = journey.offsetHeight - innerHeight;
-    const raw = (scrollY - jTop) / total;
-    const p = clamp(raw);
+  /* --- layout cache (no getBoundingClientRect inside the loop) --- */
+  let journeyTop = 0;
+  let journeyTotal = 1;
+  function measureJourney() {
+    if (!journey) return;
+    journeyTop = journey.getBoundingClientRect().top + scrollY;
+    journeyTotal = Math.max(1, journey.offsetHeight - innerHeight);
+  }
+  function readProgress() {
+    return clamp((scrollY - journeyTop) / journeyTotal);
+  }
 
-    document.documentElement.style.setProperty('--p', p.toFixed(4));
-    const zoom = 1 + easeInOut(p) * 0.25;
-    document.documentElement.style.setProperty('--zoom', zoom.toFixed(3));
-    const veil = clamp(p * 1.05, 0, 0.78);
-    document.documentElement.style.setProperty('--veil', veil.toFixed(3));
-    timeAccum += 0.012;
-    const shake = Math.sin(timeAccum) * (0.35 + p * 0.5);
-    document.documentElement.style.setProperty('--shake', shake.toFixed(3));
+  /* --- synapse field --- */
+  const stars = [];
+  let fxW = 0;
+  let fxH = 0;
+  let fxDpr = 1;
+  function spawnStar(star, anywhere) {
+    star.x = (Math.random() * 2 - 1) * 1.1;
+    star.y = (Math.random() * 2 - 1) * 0.7;
+    star.z = anywhere ? 0.08 + Math.random() * 0.92 : 1;
+    star.violet = Math.random() < 0.3;
+    star.size = 0.5 + Math.random() * 1.3;
+    star.fire = 0;
+    return star;
+  }
+  function fitFx() {
+    if (!fxCanvas || !fx) return;
+    fxDpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    fxW = fxCanvas.clientWidth || innerWidth;
+    fxH = fxCanvas.clientHeight || innerHeight;
+    fxCanvas.width = Math.round(fxW * fxDpr);
+    fxCanvas.height = Math.round(fxH * fxDpr);
+    const want = Math.round(clamp((fxW * fxH) / 9000, 110, 260));
+    while (stars.length < want) stars.push(spawnStar({}, true));
+    stars.length = want;
+  }
 
-    if (canvas && ctx && !mobile) {
-      const range = FRAME_COUNT - START_FRAME;
-      const targetIdx = Math.min(FRAME_COUNT - 1, START_FRAME + Math.floor(p * range));
-      drawFrame(targetIdx);
-    }
+  function drawField(dt, speed, portal, p, vx, vy) {
+    if (!fx) return;
+    fx.setTransform(fxDpr, 0, 0, fxDpr, 0, 0);
+    /* Clear fully at rest; at the crossing leave a little of the last
+       frame behind so streaks smear like a long exposure. */
+    fx.globalCompositeOperation = 'destination-out';
+    fx.fillStyle = `rgba(0,0,0,${(1 - portal * 0.55).toFixed(3)})`;
+    fx.fillRect(0, 0, fxW, fxH);
+    fx.globalCompositeOperation = 'lighter';
+    fx.lineCap = 'round';
 
-    chapters.forEach((c) => {
-      const from = parseFloat(c.dataset.from);
-      const to = parseFloat(c.dataset.to);
-      const span = to - from;
-      if (span <= 0) return;
-      const cp = (p - from) / span;
-      let op = 0;
-      if (cp < 0 || cp > 1) op = 0;
-      else if (cp < 0.25) op = cp / 0.25;
-      else if (cp > 0.80) op = (1 - cp) / 0.20;
-      else op = 1;
-      op = clamp(op);
-      c.style.setProperty('--cp', clamp(cp).toFixed(4));
-      c.style.setProperty('--op', op.toFixed(4));
-      if (op > 0.1 && c.classList.contains('chapter--lab')) {
-        $$('[data-counter]', c).forEach(fireCounter);
+    const focal = Math.min(fxW, fxH) * 0.62;
+    const violetMix = 1 - smoothstep(0.40, PORTAL_TO, p);
+    const intensity = 0.42 + portal * 0.58;
+    const dz = speed * dt;
+    const tail = clamp(speed, -2.2, 2.2) * 0.055;
+
+    for (let i = 0; i < stars.length; i += 1) {
+      const s = stars[i];
+      s.z -= dz;
+      if (s.z < 0.04) spawnStar(s, false);
+      else if (s.z > 1.05) { spawnStar(s, true); s.z = 0.06 + Math.random() * 0.1; }
+      if (s.fire > 0) s.fire = Math.max(0, s.fire - dt * 1.8);
+
+      const sx = vx + (s.x / s.z) * focal;
+      const sy = vy + (s.y / s.z) * focal;
+      if (sx < -60 || sx > fxW + 60 || sy < -60 || sy > fxH + 60) {
+        if (dz > 0) spawnStar(s, false);
+        continue;
       }
-    });
+      const tz = clamp(s.z + tail + 0.0025, 0.03, 1.2);
+      const tx = vx + (s.x / tz) * focal;
+      const ty = vy + (s.y / tz) * focal;
 
-    if (manifesto && manifestoWords.length) {
-      const ch = manifesto.closest('.chapter');
-      const from = parseFloat(ch.dataset.from);
-      const to = parseFloat(ch.dataset.to);
+      const depth = clamp((1 - s.z) * 2.4) * clamp((s.z - 0.04) / 0.1);
+      const alpha = depth * intensity * (0.55 + s.fire * 0.9);
+      if (alpha < 0.02) continue;
+      const width = clamp((s.size * 0.42) / s.z, 0.4, 3.4) * (1 + s.fire);
+      const violet = s.violet && violetMix > 0.5;
+      fx.strokeStyle = violet
+        ? `rgba(206,160,255,${alpha.toFixed(3)})`
+        : `rgba(128,206,255,${alpha.toFixed(3)})`;
+      fx.lineWidth = width;
+      fx.beginPath();
+      fx.moveTo(tx, ty);
+      fx.lineTo(sx + 0.01, sy);
+      fx.stroke();
+    }
+
+    /* A neuron fires now and then: one star flares and decays. */
+    if (Math.random() < dt * 3.2) {
+      const s = stars[(Math.random() * stars.length) | 0];
+      if (s) s.fire = 1;
+    }
+  }
+
+  /* --- per-chapter depth choreography --- */
+  function applyChapter(c, p) {
+    const span = c.to - c.from;
+    if (span <= 0) return;
+    const cp = (p - c.from) / span;
+    const el = c.el;
+    let op;
+    let scale;
+    let blur;
+    let ty = 0;
+
+    if (cp <= 0 || cp >= 1) {
+      op = 0;
+      scale = 1;
+      blur = 0;
+    } else if (c.fly) {
+      /* Fly-through: the line rushes toward the viewer and past them. */
+      scale = 0.5 * Math.pow(5, cp);
+      op = cp < 0.2 ? cp / 0.2 : cp > 0.55 ? clamp(1 - (cp - 0.55) / 0.3) : 1;
+      blur = Math.max(0, scale - 1.3) * 5;
+    } else {
+      const enter = clamp(cp / 0.25);
+      const exit = clamp((cp - 0.8) / 0.2);
+      op = enter * (1 - exit);
+      scale = 0.9 + 0.1 * easeOutCubic(enter) + 0.16 * easeInCubic(exit);
+      blur = (1 - easeOutCubic(enter)) * 7 + exit * 9;
+      ty = (1 - easeOutCubic(enter)) * 26;
+    }
+
+    el.style.setProperty('--cp', clamp(cp).toFixed(4));
+    el.style.setProperty('--op', op.toFixed(4));
+    if (op <= 0.001) {
+      if (c.shown !== false) {
+        el.style.visibility = 'hidden';
+        el.style.opacity = '0';
+        c.shown = false;
+      }
+      return;
+    }
+    if (c.shown !== true) {
+      el.style.visibility = 'visible';
+      c.shown = true;
+    }
+    el.style.opacity = op.toFixed(4);
+    el.style.transform = cinematic ? `translate3d(0, ${ty.toFixed(1)}px, 0) scale(${scale.toFixed(4)})` : 'none';
+    el.style.filter = cinematic && blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : 'none';
+    if (c.lab && op > 0.1) $$('[data-counter]', el).forEach(fireCounter);
+  }
+
+  let lastStageVars = '';
+  let lastLabelIndex = -2;
+  function renderJourney(p, dt, vel, now) {
+    const portal = cinematic ? portalAmount(p) : 0;
+    const f = frameForProgress(p);
+    const mask = ghostMaskForFrame(f);
+
+    /* camera */
+    if (cinematic) {
+      const jitter = portal * 2.6;
+      cam.scale = 1 + 0.035 * smoothstep(0, PORTAL_FROM, p) + 0.12 * portal;
+      cam.x = -pointer.x * 18 + Math.sin(now * 0.031) * jitter;
+      cam.y = -pointer.y * 11 + Math.cos(now * 0.027) * jitter;
+    }
+    drawFrame(f);
+
+    if (cinematic && fx) {
+      const speed = 0.045 + clamp(vel * 7, -0.7, 1.3) + portal * 1.8;
+      drawField(dt, speed, portal, p, fxW / 2 + pointer.x * 46, fxH / 2 + pointer.y * 28);
+    }
+
+    if (chaptersWrap && cinematic) {
+      chaptersWrap.style.transform = `translate3d(${(pointer.x * -9).toFixed(1)}px, ${(pointer.y * -6).toFixed(1)}px, 0)`;
+    }
+    if (brainCtasFrame && cinematic && p < 0.2) {
+      brainCtasFrame.style.transform = `translate3d(${cam.x.toFixed(1)}px, ${cam.y.toFixed(1)}px, 0)`;
+    }
+
+    const vars = `${p.toFixed(3)}|${portal.toFixed(3)}|${mask.toFixed(3)}`;
+    if (stage && vars !== lastStageVars) {
+      lastStageVars = vars;
+      stage.style.setProperty('--p', p.toFixed(3));
+      stage.style.setProperty('--portal', portal.toFixed(3));
+      stage.style.setProperty('--mask', mask.toFixed(3));
+      stage.classList.toggle('is-crossing', portal > 0.2);
+      stage.classList.toggle('is-inside', p > PORTAL_TO - 0.04);
+    }
+
+    chapterData.forEach((c) => applyChapter(c, p));
+
+    if (manifestoChapter && manifestoWords.length) {
+      const from = parseFloat(manifestoChapter.dataset.from);
+      const to = parseFloat(manifestoChapter.dataset.to);
       const inner = clamp((p - from - 0.02) / (to - from - 0.04));
       const cutoff = Math.floor(easeInOut(inner) * manifestoWords.length);
       for (let i = 0; i < manifestoWords.length; i += 1) {
@@ -2501,32 +2731,72 @@
       }
     }
 
-    if (quoteEls.length) {
-      const minds = chapters.find(c => c.classList.contains('chapter--minds'));
-      if (minds) {
-        const from = parseFloat(minds.dataset.from);
-        const to = parseFloat(minds.dataset.to);
-        const span = to - from;
-        const inner = clamp((p - from) / span);
-        const idx = Math.min(quoteEls.length - 1, Math.floor(inner * quoteEls.length));
-        if (idx !== activeQuote) {
-          quoteEls.forEach((q, i) => {
-            q.classList.remove('is-on', 'is-out');
-            if (i === idx) q.classList.add('is-on');
-            else if (i < idx) q.classList.add('is-out');
-          });
-          activeQuote = idx;
-        }
+    if (quoteEls.length && mindsChapter) {
+      const from = parseFloat(mindsChapter.dataset.from);
+      const to = parseFloat(mindsChapter.dataset.to);
+      const inner = clamp((p - from) / (to - from));
+      const idx = Math.min(quoteEls.length - 1, Math.floor(inner * quoteEls.length));
+      if (idx !== activeQuote) {
+        quoteEls.forEach((q, i) => {
+          q.classList.remove('is-on', 'is-out');
+          if (i === idx) q.classList.add('is-on');
+          else if (i < idx) q.classList.add('is-out');
+        });
+        activeQuote = idx;
       }
     }
 
     if (stageLabel) {
-      const foundIndex = STAGE_RANGES.findIndex(([f, t]) => p >= f && p < t);
-      const nextLabel = STAGE_LABELS[foundIndex] || STAGE_LABELS[0];
-      if (nextLabel && stageLabel.textContent !== nextLabel) {
-        stageLabel.textContent = nextLabel;
+      const foundIndex = STAGE_RANGES.findIndex(([a, b]) => p >= a && p < b);
+      if (foundIndex !== lastLabelIndex) {
+        lastLabelIndex = foundIndex;
+        const nextLabel = STAGE_LABELS[foundIndex] || STAGE_LABELS[0];
+        if (nextLabel) stageLabel.textContent = nextLabel;
       }
     }
+  }
+
+  /* --- pointer (eased) --- */
+  const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  if (cinematic && fine) {
+    addEventListener('pointermove', (e) => {
+      pointer.tx = (e.clientX / innerWidth) * 2 - 1;
+      pointer.ty = (e.clientY / innerHeight) * 2 - 1;
+    }, { passive: true });
+    document.addEventListener('pointerleave', () => { pointer.tx = 0; pointer.ty = 0; });
+  }
+
+  /* --- loop --- */
+  const loop = { p: 0, vel: 0, last: 0, raf: 0, visible: true };
+  function frame(now) {
+    loop.raf = 0;
+    const dt = Math.min(0.05, loop.last ? (now - loop.last) / 1000 : 1 / 60);
+    loop.last = now;
+
+    const target = readProgress();
+    const prev = loop.p;
+    loop.p += (target - loop.p) * (1 - Math.pow(0.0009, dt));
+    if (Math.abs(target - loop.p) < 0.00004) loop.p = target;
+    loop.vel += (((loop.p - prev) / dt) - loop.vel) * 0.18;
+
+    const ease = 1 - Math.pow(0.02, dt);
+    pointer.x += (pointer.tx - pointer.x) * ease;
+    pointer.y += (pointer.ty - pointer.y) * ease;
+
+    renderJourney(loop.p, dt, loop.vel, now);
+
+    if (loop.visible && !document.hidden) loop.raf = requestAnimationFrame(frame);
+  }
+  function startLoop() {
+    if (loop.raf || !cinematic) return;
+    loop.last = 0;
+    loop.raf = requestAnimationFrame(frame);
+  }
+
+  function updateProgressBar() {
+    if (!progressBar) return;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    progressBar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
   }
 
   let ticking = false;
@@ -2534,22 +2804,33 @@
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(() => {
-      update();
       ticking = false;
+      updateProgressBar();
+      /* Reduced motion on desktop: no inertia, no field — direct mapping. */
+      if (journey && stage && !mobile && !cinematic) renderJourney(readProgress(), 0, 0, 0);
     });
   }
 
+  measureJourney();
+  fitFx();
+  addEventListener('resize', () => { measureJourney(); fitFx(); onScroll(); });
+  addEventListener('load', measureJourney);
   document.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  if (!reduced && !mobile) {
-    setInterval(() => {
-      timeAccum += 0.012;
-      const p = parseFloat(document.documentElement.style.getPropertyValue('--p')) || 0;
-      const shake = Math.sin(timeAccum) * (0.35 + p * 0.5);
-      document.documentElement.style.setProperty('--shake', shake.toFixed(3));
-    }, 60);
+
+  if (journey && stage && cinematic) {
+    loop.p = readProgress();
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        loop.visible = entries[0].isIntersecting;
+        if (loop.visible) startLoop();
+      }).observe(journey);
+    }
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && loop.visible) startLoop(); });
+    startLoop();
+  } else if (journey && stage && !mobile) {
+    renderJourney(readProgress(), 0, 0, 0);
   }
-  update();
+  updateProgressBar();
 
   /* ---------- 10. YEAR ---------- */
   const y = $('[data-year]');
@@ -2599,6 +2880,31 @@
         });
       }, { threshold: 0.4 });
       cio.observe(ch);
+    }
+
+    /* The crossing on a phone: once the "inside the mind" line reaches
+       mid-screen, the backdrop dissolves from the outer brain to its
+       interior (and back when scrolling up). */
+    const portalChapter = chapters.find(c => c.dataset.depth === 'fly');
+    if (portalChapter && canvas && !reduced) {
+      let inside = false;
+      let swapTimer = 0;
+      const setInside = (next) => {
+        if (next === inside) return;
+        inside = next;
+        clearTimeout(swapTimer);
+        canvas.style.opacity = '0';
+        swapTimer = setTimeout(() => {
+          drawFrame(inside ? MOBILE_INSIDE_FRAME : START_FRAME, true);
+          canvas.style.opacity = '';
+        }, 450);
+      };
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const below = entry.boundingClientRect.top > innerHeight * 0.5;
+          setInside(!below);
+        });
+      }, { rootMargin: '-50% 0px -50% 0px' }).observe(portalChapter);
     }
 
     quoteEls.forEach(q => q.classList.add('is-on'));

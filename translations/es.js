@@ -185,6 +185,10 @@ window.FTP_TRANSLATIONS.es = {
         },
       ],
     },
+    portal: {
+      label: "SINAPSIS · TRAVESÍA",
+      titleHtml: 'Dentro de la <em>mente</em>.',
+    },
     invite: {
       chapter: "/ Capítulo Final · Invitación",
       titleHtml:

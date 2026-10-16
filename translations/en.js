@@ -185,6 +185,10 @@ window.FTP_TRANSLATIONS.en = {
         },
       ],
     },
+    portal: {
+      label: "SYNAPSE · CROSSING",
+      titleHtml: 'Inside the <em>mind</em>.',
+    },
     invite: {
       chapter: "/ Final Chapter · Invitation",
       titleHtml:
